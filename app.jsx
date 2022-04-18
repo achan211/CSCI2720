@@ -112,9 +112,11 @@ class CreateAccount extends React.Component {
         if(document.getElementById('pwd').value!=document.getElementById('confirmpwd').value){
             msg.style.color='red';
             msg.innerHTML=" * Password must Match the previous entry.";
+            document.getElementById("btn").disabled = true;
         }else{
             msg.style.color='green';
             msg.innerHTML=" Password match";
+            document.getElementById("btn").disabled = false;
         }
     }
     render() {
@@ -140,10 +142,10 @@ class CreateAccount extends React.Component {
                     <div class="col-sm-5">
                     <input type="password" class="form-control" id="confirmpwd" placeholder="confirm password" onKeyUp={()=>this.handleConfirm()}/>
                     <span id="msg"></span>
-                    </div>{/*confirm done in function handleConfirm */}
+                    </div>{/*confirm done in function handleConfirm() */}
                 </div>
                 <div  class="text-center">
-                    <button type="button" class="btn btn-dark">Signup</button>
+                    <button id="btn" type="button" class="btn btn-dark">Signup</button>
                 </div>   
                 <div class="text-center">
                        <LongLink to="/" label=  "Already have an account? Sign In" />
