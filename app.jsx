@@ -143,7 +143,7 @@ class CreateAccount extends React.Component {
                     <div class="col-sm-5">
                     <input type="password" class="form-control" id="confirmpwd" placeholder="confirm password" onKeyUp={()=>this.handleConfirm()}/>
                     <span id="msg"></span>
-                    </div>
+                    </div>{/*confirm done in function handleConfirm */}
                 </div>
                 <div  class="text-center">
                     <button type="button" class="btn btn-dark">Signup</button>
