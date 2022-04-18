@@ -17,20 +17,17 @@ class App extends React.Component{
                         <span class="navbar-brand mb-0 h1"><img src="\images\favicon.png"></img>WEATHERING WITH ME</span>
 
                         <ul class="navbar-nav">
+
                         <li class="nav-item">
-                            <LongLink class="nav-link" to="/" label="Home" />
-                        </li>
-                        
-                        <li class="nav-item">
-                            <LongLink class="nav-link" to="/login" label="Login" />
+                            <LongLink class="nav-link" to="/home" label="Home" />
                         </li>
                         </ul>
                     </div>
                 </nav>
 
                     <Routes>
-                        <Route path="/" element={<Home/>} />
-                        <Route path="/login" element={<Login/>} />
+                        <Route path="/" element={<Login/>} />
+                        <Route path="/Home" element={<Home/>} />
                         <Route path="/createaccount" element={<CreateAccount/>} />
                         <Route path="*" element={<NoMatch/>} />
                     </Routes>
@@ -46,7 +43,7 @@ function LongLink({label, to}) {
     return (
     <li class="nav-item">
     {match && " "}
-    <Link to={to}>{label}</Link>
+    <Link style={{color:"gray"}} to={to}>{label}</Link>
     </li>
     );
 }
@@ -148,6 +145,9 @@ class CreateAccount extends React.Component {
                 <div  class="text-center">
                     <button type="button" class="btn btn-dark">Signup</button>
                 </div>   
+                <div class="text-center">
+                       <LongLink to="/" label=  "Already have an account? Sign In" />
+                </div>
             </form>
         </>
       );
