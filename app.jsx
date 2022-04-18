@@ -110,6 +110,16 @@ class Login extends React.Component{
 }
 
 class CreateAccount extends React.Component {
+    handleConfirm(){
+        let msg=document.getElementById("msg");
+        if(document.getElementById('pwd').value!=document.getElementById('confirmpwd').value){
+            msg.style.color='red';
+            msg.innerHTML=" * Password must Match the previous entry.";
+        }else{
+            msg.style.color='green';
+            msg.innerHTML=" Password match";
+        }
+    }
     render() {
       return(
         <>
@@ -126,7 +136,13 @@ class CreateAccount extends React.Component {
                 </div>
                 <div class="mb-3 row justify-content-center">
                     <div class="col-sm-5">
-                    <input type="password" class="form-control" id="password" placeholder="password"/>
+                    <input type="password" class="form-control" id="pwd" placeholder="password"/>
+                    </div>
+                </div>
+                <div class="mb-3 row justify-content-center">
+                    <div class="col-sm-5">
+                    <input type="password" class="form-control" id="confirmpwd" placeholder="confirm password" onKeyUp={()=>this.handleConfirm()}/>
+                    <span id="msg"></span>
                     </div>
                 </div>
                 <div  class="text-center">
