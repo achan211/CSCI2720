@@ -145,7 +145,7 @@ class CreateAccount extends React.Component {
                     </div>{/*confirm done in function handleConfirm() */}
                 </div>
                 <div  class="text-center">
-                    <button id="btn" type="button" class="btn btn-dark">Signup</button>
+                    <button id="btn" type="button" class="btn btn-dark" disabled>Signup</button>
                 </div>   
                 <div class="text-center">
                        <LongLink to="/" label=  "Already have an account? Sign In" />
