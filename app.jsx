@@ -140,7 +140,7 @@ class CreateAccount extends React.Component {
   }
  
 ReactDOM.render(
-    <App name="CUHK Pictures"/>,
+    <App name="WEATHERING WITH ME"/>,
     document.querySelector("#app")
 );
 
