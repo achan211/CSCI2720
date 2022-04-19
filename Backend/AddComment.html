@@ -1,0 +1,44 @@
+<html>
+    <body>
+        <h1>Update Event Page</h1>
+        Event ID: <input id="eid">
+        <button onclick="load()">Load Event</button>
+        <br />
+        Event Name: <input id="ename"> <br />
+        Event Location: <input id="locId"> <br />
+        Quota: <input id="quota"> <br />
+        <button onclick="update()">Update Event</button>
+        <div id="ph"></div>
+    </body>
+    <script>
+        function load(){
+            let eid = document.querySelector('#eid').value;
+            fetch("http://localhost:3000/event/"+eid)
+            .then(res => res.json())
+            .then(data => {
+                document.querySelector('#ename').value = data.name;
+                document.querySelector('#locId').value = data.loc[0].locId;
+                document.querySelector('#quota').value = data.quota;
+            })
+        }
+        function update() {
+            let eid = document.querySelector('#eid').value;
+            let name = document.querySelector('#ename').value;
+            let locId = document.querySelector('#locId').value;
+            let quota = document.querySelector('#quota').value;
+
+            let bodytext = "eid=" + eid + "&name=" + name + "&locId=" + locId + "&quota=" + quota
+
+            console.log("Updated Event " + eid);
+
+            fetch("http://localhost:3000/event/" + eid, {
+                method: "PUT", 
+                headers: {"Content-Type": "application/x-www-form-urlencoded"},
+                body: bodytext})
+            .then(res => res.text())
+            .then(data => console.log(data))
+
+            document.querySelector('#ph').innerHTML = "Event " + eid + " is updated. Please check console."
+        }
+    </script>
+</html>
