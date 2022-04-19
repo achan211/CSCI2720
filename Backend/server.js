@@ -38,12 +38,8 @@ db.once('open', function() {
   const Location = mongoose.model('Location', LocationSchema);
   const Comment = mongoose.model('Comment', CommentSchema);
 
-  app.get('/createAdmin', (req, res) => {
-    User.create({
-      username: 'admin',
-      pwd: 'admin',
-      admin: true
-    }, (err, e) => {
+  app.get('/', (req, res) => {
+    User.find((err, e) => {
       if (err) res.send(err);
       else res.send(e);
     })
