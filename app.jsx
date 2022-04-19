@@ -10,24 +10,16 @@ class App extends React.Component{
           
             <BrowserRouter>
                 <div>
-                    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-
+                    <nav class="navbar navbar-expand-lg navbar-light" style={{backgroundColor: "silver"}}>
                         <div class="collapse navbar-collapse" id="navbarNav">
-
                             <span class="navbar-brand mb-0 h1"><img src="\images\favicon.png"></img>WEATHERING WITH ME</span>
-
-                            <ul class="navbar-nav">
-
-                            <li class="nav-item">
-                                <LongLink class="nav-link" to="/home" label="Home" />
-                            </li>
-                            </ul>
+                            <NavList/>
                         </div>
                     </nav>
 
                     <Routes>
-                        <Route path="/" element={<Login/>} />
-                        <Route path="/Home" element={<Home/>} />
+                        <Route path="/login" element={<Login/>} />
+                        <Route path="/" element={<Home/>} />
                         <Route path="/createaccount" element={<CreateAccount/>} />
                         <Route path="*" element={<NoMatch/>} />
                     </Routes>
@@ -47,6 +39,7 @@ function LongLink({label, to}) {
     </li>
     );
 }
+
 function NoMatch() {
     let location = useLocation();
     return (
@@ -58,15 +51,44 @@ function NoMatch() {
     );
 }
 
+class NavList extends React.Component{
+    render(){
+     let isAdmin=0, isUser=0, isNonUser=1;{/*Set to 1 For testing(!!!!!todo)*/}
+        if(isAdmin==1)
+            return(
+                <>{/*----------NavList for admin----------*/}
+                    <ul class="navbar-nav">
+                        <p >Admin</p>
+                        <LongLink  to="/" label="Home" />
+                    </ul>
+                </>
+            );
+        else if(isUser==1)
+            return(
+                <>{/*-----------NavList for user----------*/}
+                    <ul class="navbar-nav">
+                        <LongLink  to="/" label="Home" />
+                    </ul>       
+                </>
+            );
+        else if(isNonUser==1)
+            return(
+                <>{/*----------NavList for nonuser----------*/}
+                    <ul class="navbar-nav">
+                        <LongLink  to="/login" label="Login" />
+                    </ul>
+                </>
+            );
+    }
+}
 class Home extends React.Component {
     render() {
-      return(
-        <>
-            <h2 >hello</h2>
-           
-        </>
-      );
-
+        return(
+            <>
+                <h2 >hello home</h2>
+            
+            </>
+        );
     }
   }
  
@@ -77,7 +99,7 @@ class Login extends React.Component{
             <>
             <br/>
             <br/>
-            <form action ="/login" class="container px-1 " method="POST">{/*todo*/}
+            <form action ="" class="container px-1 " method="POST">{/*----------!!!!!todo form action ----------*/}
                 <div class="text-center">
                     {/*login.png by flaticon*/ }
                     <img src={"/images/login.png"} class="img-fluid" style={{width: "200px"}}/>
@@ -107,7 +129,9 @@ class Login extends React.Component{
 }
 
 class CreateAccount extends React.Component {
-    handleConfirm(){{/*ref: https://stackoverflow.com/questions/21727317/how-to-check-confirm-password-field-in-form-without-reloading-page */}
+    handleConfirm(){
+        {/*----------confirm pwd match and enable the button----------*/}
+        {/*ref: https://stackoverflow.com/questions/21727317/how-to-check-confirm-password-field-in-form-without-reloading-page */}
         let msg=document.getElementById("msg");
         if(document.getElementById('pwd').value!=document.getElementById('confirmpwd').value){
             msg.style.color='red';
@@ -123,7 +147,7 @@ class CreateAccount extends React.Component {
       return(
         <>
             <br/><br/>
-            <form action ="/createaccount" class="container px-1 " method="POST">{/*todo*/}
+            <form action ="/createaccount" class="container px-1 " method="POST">{/*----------!!!!!todo form action----------*/}
                 <div class="text-center">
                     <h2>Sign Up</h2>
                 </div>
@@ -142,13 +166,13 @@ class CreateAccount extends React.Component {
                     <div class="col-sm-5">
                     <input type="password" class="form-control" id="confirmpwd" placeholder="confirm password" onKeyUp={()=>this.handleConfirm()}/>
                     <span id="msg"></span>
-                    </div>{/*confirm done in function handleConfirm() */}
+                    </div>{/*----------confirm password done in function handleConfirm()----------*/}
                 </div>
                 <div  class="text-center">
                     <button id="btn" type="button" class="btn btn-dark" disabled>Signup</button>
                 </div>   
                 <div class="text-center">
-                       <LongLink to="/" label=  "Already have an account? Sign In" />
+                       <LongLink to="/login" label=  "Already have an account? Sign In" />
                 </div>
             </form>
         </>
