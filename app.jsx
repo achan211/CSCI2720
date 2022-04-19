@@ -10,20 +10,20 @@ class App extends React.Component{
           
             <BrowserRouter>
                 <div>
-                <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+                    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 
-                    <div class="collapse navbar-collapse" id="navbarNav">
+                        <div class="collapse navbar-collapse" id="navbarNav">
 
-                        <span class="navbar-brand mb-0 h1"><img src="\images\favicon.png"></img>WEATHERING WITH ME</span>
+                            <span class="navbar-brand mb-0 h1"><img src="\images\favicon.png"></img>WEATHERING WITH ME</span>
 
-                        <ul class="navbar-nav">
+                            <ul class="navbar-nav">
 
-                        <li class="nav-item">
-                            <LongLink class="nav-link" to="/home" label="Home" />
-                        </li>
-                        </ul>
-                    </div>
-                </nav>
+                            <li class="nav-item">
+                                <LongLink class="nav-link" to="/home" label="Home" />
+                            </li>
+                            </ul>
+                        </div>
+                    </nav>
 
                     <Routes>
                         <Route path="/" element={<Login/>} />
@@ -41,9 +41,9 @@ class App extends React.Component{
 function LongLink({label, to}) {
     let match = useMatch({path: to});
     return (
-    <li class="nav-item">
+    <li style={{listStyleType:'none'}}>
     {match && " "}
-    <Link style={{color:"gray"}} to={to}>{label}</Link>
+        <Link style={{color:"gray"}} to={to}>{label}</Link>
     </li>
     );
 }
@@ -107,7 +107,7 @@ class Login extends React.Component{
 }
 
 class CreateAccount extends React.Component {
-    handleConfirm(){
+    handleConfirm(){{/*ref: https://stackoverflow.com/questions/21727317/how-to-check-confirm-password-field-in-form-without-reloading-page */}
         let msg=document.getElementById("msg");
         if(document.getElementById('pwd').value!=document.getElementById('confirmpwd').value){
             msg.style.color='red';
