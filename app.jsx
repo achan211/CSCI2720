@@ -15,11 +15,13 @@ class App extends React.Component{
                             <span class="navbar-brand mb-0 h1"><img src="\images\favicon.png"></img>WEATHERING WITH ME</span>
                             <NavList/>
                         </div>
+                        <Logout/>
                     </nav>
 
                     <Routes>
                         <Route path="/login" element={<Login/>} />
                         <Route path="/" element={<Home/>} />
+                        <Route path="/favloc" element={<FavLoc/>} />
                         <Route path="/createaccount" element={<CreateAccount/>} />
                         <Route path="*" element={<NoMatch/>} />
                     </Routes>
@@ -35,7 +37,7 @@ function LongLink({label, to}) {
     return (
     <li style={{listStyleType:'none'}}>
     {match && " "}
-        <Link style={{color:"gray"}} to={to}>{label}</Link>
+        <Link style={{color:"gray", fontSize:"20px"}} to={to}>{label}</Link>
     </li>
     );
 }
@@ -51,41 +53,92 @@ function NoMatch() {
     );
 }
 
+
 class NavList extends React.Component{
     render(){
-     let isAdmin=0, isUser=0, isNonUser=1;{/*Set to 1 For testing(!!!!!todo)*/}
+     let isAdmin=1, isUser=0, isNonUser=0;{/*Set to 1 For testing diff user(!!!!!todo)*/}
         if(isAdmin==1)
             return(
                 <>{/*----------NavList for admin----------*/}
-                    <ul class="navbar-nav">
-                        <p >Admin</p>
-                        <LongLink  to="/" label="Home" />
-                    </ul>
+                        <p>&nbsp;</p>
+                        <span class="material-icons">&#xE88A;</span>
+                        <LongLink to="/" label="Home" />
                 </>
             );
         else if(isUser==1)
             return(
                 <>{/*-----------NavList for user----------*/}
-                    <ul class="navbar-nav">
-                        <LongLink  to="/" label="Home" />
-                    </ul>       
+                        <p>&nbsp;</p>
+                        <span class="material-icons">&#xE88A;</span>
+                        <LongLink to="/" label="Home" />
+                        
+                        <p>&nbsp;&nbsp;&nbsp;&nbsp;</p>
+                        <span class="material-icons">&#xE87D;</span>
+                        <LongLink to='/favloc' label='My favourite location'/>
                 </>
             );
         else if(isNonUser==1)
-            return(
-                <>{/*----------NavList for nonuser----------*/}
-                    <ul class="navbar-nav">
-                        <LongLink  to="/login" label="Login" />
-                    </ul>
-                </>
-            );
+            return;
     }
 }
+
+class Logout extends React.Component {
+
+    render() {
+        return(
+            <>
+                <li style={{listStyleType:'none'}} class="nav-item dropdown">{/*dropdown for logout*/}
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    
+                    {/*__________Todo: username???????&& !display when isNonUser  */}
+                    <span style={{float:"right"}}><i class="material-icons">&#xE853;</i>Hi, Username!&nbsp;&nbsp;&nbsp;</span>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
+                    <li><a class="dropdown-item" href="/login">Logout</a></li>
+                </ul>
+                </li>   
+            </>
+        );
+    }
+  }
+
+
 class Home extends React.Component {
     render() {
         return(
             <>
-                <h2 >hello home</h2>
+                <div class="container">
+                    <br/>
+                    <h2>Location</h2>
+                    <div class="row">
+                        <div class="col justify-content-center">{/*----------!!!!!to do: search for loc---------- */}
+                            <form class="d-flex">
+                                <input class="form-control me-2" type="search" placeholder="Search for location" aria-label="Search"/>
+                                <button class="btn btn-dark" type="submit"><span class="material-icons">&#xE8B6;</span></button>
+                            </form>
+                        </div>
+                        <div class="col justify-content-center">{/*----------!!!!!To do: sorting using dropdown list---------- */}
+                            <form class="d-flex">
+                                <input class="form-control me-2" list="datalistOptions" id="exampleDataList" placeholder="Sort by"/>
+                                <datalist id="datalistOptions">
+                                <option value="opt1"/>
+                                <option value="opt2"/>
+                                <option value="opt3"/>
+                                </datalist>
+                            </form>
+                        </div>    
+                    </div>
+                </div>
+
+            </>
+        );
+    }
+  }
+class FavLoc extends React.Component {
+    render() {
+        return(
+            <>
+                <h2 >fav loc</h2>
             
             </>
         );
