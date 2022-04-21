@@ -37,7 +37,7 @@ function LongLink({label, to}) {
     return (
     <li style={{listStyleType:'none'}}>
     {match && " "}
-        <Link style={{color:"black", textDecoration: 'none' , fontSize:"20px"}} to={to}>{label}</Link>
+        <Link style={{color:"#484848", textDecoration: 'none' , fontSize:"20px"}} to={to}>{label}</Link>
     </li>
     );
 }
@@ -61,7 +61,7 @@ class NavList extends React.Component{
             return(
                 <>{/*----------NavList for admin----------*/}
                         <p>&nbsp;</p>
-                        <span class="material-icons">&#xE88A;</span>
+                        <span class="material-icons" style={{color:'#484848'}}>&#xE88A;</span>
                         <LongLink to="/" label="Home" />
                 </>
             );
@@ -69,11 +69,11 @@ class NavList extends React.Component{
             return(
                 <>{/*-----------NavList for user----------*/}
                         <p>&nbsp;</p>
-                        <span class="material-icons">&#xE88A;</span>
+                        <span class="material-icons" style={{color:'#484848'}}>&#xE88A;</span>
                         <LongLink to="/" label="Home" />
                         
                         <p>&nbsp;&nbsp;&nbsp;&nbsp;</p>
-                        <span class="material-icons">&#xE87D;</span>
+                        <span class="material-icons" style={{color:'#484848'}}>&#xE87D;</span>
                         <LongLink to='/favloc' label='My favourite location'/>
                 </>
             );
@@ -91,10 +91,10 @@ class Logout extends React.Component {
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                     
                     {/*__________Todo: username???????&& !display when isNonUser  */}
-                    <span style={{float:"right"}}><i class="material-icons">&#xE853;</i>Hi, Username!&nbsp;&nbsp;&nbsp;</span>
+                    <span style={{float:"right",color:'#484848'}}><i style={{color:'#484848'}} class="material-icons">&#xE853;</i>Hi, Username!&nbsp;&nbsp;&nbsp;</span>
                 </a>
-                <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
-                    <li><a class="dropdown-item" href="/login">Logout</a></li>
+                <ul style={{backgroundColor: "silver"}} class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
+                <LongLink to="/login" label="&nbsp;&nbsp; &nbsp;&nbsp;Logout" />
                 </ul>
                 </li>   
             </>
