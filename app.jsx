@@ -56,7 +56,7 @@ function NoMatch() {
 
 class NavList extends React.Component{
     render(){
-     let isAdmin=1, isUser=0, isNonUser=0;{/*Set to 1 For testing diff user(!!!!!todo)*/}
+     let isAdmin=0, isUser=1, isNonUser=0;{/*Set to 1 For testing diff user(!!!!!todo)*/}
         if(isAdmin==1)
             return(
                 <>{/*----------NavList for admin----------*/}
@@ -111,35 +111,91 @@ class Home extends React.Component {
                     <br/>
                     <h2>Location</h2>
                     <div class="row">
-                        <div class="col justify-content-center">{/*----------!!!!!to do: search for loc---------- */}
-                            <form class="d-flex">
-                                <input class="form-control me-2" type="search" placeholder="Search for location" aria-label="Search"/>
-                                <button class="btn btn-dark" type="submit"><span class="material-icons">&#xE8B6;</span></button>
-                            </form>
+                        <div class="col-7">
+                            <div class='row'>
+                                <div class='col-6'>
+                                <form class="d-flex">{/*----------!!!!!to do: search for loc---------- */}
+                                    <input class="form-control me-2" type="search" placeholder="Search for location" aria-label="Search"/>
+                                    <button class="btn btn-dark" type="submit"><span class="material-icons">&#xE8B6;</span></button>
+                                </form>
+                                </div>
+                                <div class='col-6'>
+                                <form class="d-flex">{/*----------!!!!!To do: sorting using dropdown list---------- */}
+                                    <input class="form-control me-2" list="datalistOptions" id="exampleDataList" placeholder="Sort by"/>
+                                    <datalist id="datalistOptions">
+                                    <option value="opt1"/>
+                                    <option value="opt2"/>
+                                    <option value="opt3"/>
+                                    </datalist>
+                                </form>
+                                </div>
+                            </div>
+                            <Table/>{/*----------!!!!!todo: loc data tranfer by props??---------- */}
                         </div>
-                        <div class="col justify-content-center">{/*----------!!!!!To do: sorting using dropdown list---------- */}
-                            <form class="d-flex">
-                                <input class="form-control me-2" list="datalistOptions" id="exampleDataList" placeholder="Sort by"/>
-                                <datalist id="datalistOptions">
-                                <option value="opt1"/>
-                                <option value="opt2"/>
-                                <option value="opt3"/>
-                                </datalist>
-                            </form>
+                        <div class="col-5">
+                        <div class="mapouter">
+                                    <div class="gmap_canvas">
+                                        {/*----------Use this link to generate the src https://google-map-generator.com/ ---------- */}
+                                        <iframe width="300" height="300" id="gmap_canvas" src={"https://maps.google.com/maps?q=2880%20Broadway,%20New%20York&t=&z=13&ie=UTF8&iwloc=&output=embed"} frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe>
+                                    </div>
+                                </div>
                         </div>    
                     </div>
+
+
                 </div>
 
             </>
         );
     }
   }
+  {/*-----Todo: table for both favloc and home (usemapping??)--------*/ }
+class Table extends React.Component{
+    render() {
+        return(
+            <>
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">First</th>
+                    <th scope="col">Last</th>
+                    <th scope="col">Handle</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                    <th scope="row">1</th>
+                    <td>Mark</td>
+                    <td>Otto</td>
+                    <td>@mdo</td>
+                    </tr>
+                    <tr>
+                    <th scope="row">2</th>
+                    <td>Jacob</td>
+                    <td>Thornton</td>
+                    <td>@fat</td>
+                    </tr>
+                    <tr>
+                    <th scope="row">3</th>
+                    <td colspan="2">Larry the Bird</td>
+                    <td>@twitter</td>
+                    </tr>
+                </tbody>
+            </table>
+            </>
+        );
+    }
+}
 class FavLoc extends React.Component {
     render() {
         return(
             <>
-                <h2 >fav loc</h2>
-            
+            <div class="container">
+            <br/>
+            <div class="text-center"><h2>My favourite Location</h2></div>
+                <Table/>
+            </div>
             </>
         );
     }
