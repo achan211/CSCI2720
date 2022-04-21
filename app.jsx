@@ -12,7 +12,7 @@ class App extends React.Component{
                 <div>
                     <nav class="navbar navbar-expand-lg navbar-light" style={{backgroundColor: "silver"}}>
                         <div class="collapse navbar-collapse" id="navbarNav">
-                            <span class="navbar-brand mb-0 h1"><img src="\images\favicon.png"></img>WEATHERING WITH ME</span>
+                            <span style={{fontWeight: 'bold'}} class="navbar-brand mb-0 h1"><img src="\images\favicon.png"></img>WEATHERING WITH ME</span>
                             <NavList/>
                         </div>
                         <Logout/>
@@ -37,7 +37,7 @@ function LongLink({label, to}) {
     return (
     <li style={{listStyleType:'none'}}>
     {match && " "}
-        <Link style={{color:"gray", fontSize:"20px"}} to={to}>{label}</Link>
+        <Link style={{color:"black", textDecoration: 'none' , fontSize:"20px"}} to={to}>{label}</Link>
     </li>
     );
 }
