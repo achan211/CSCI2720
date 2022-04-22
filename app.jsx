@@ -1,5 +1,4 @@
 
-
 const {BrowserRouter, Routes, Route, Link} = ReactRouterDOM;
 const {useMatch, useParams, useLocation} = ReactRouterDOM;
 
@@ -12,7 +11,8 @@ class App extends React.Component{
                 <div>
                     <nav class="navbar navbar-expand-lg navbar-light" style={{backgroundColor: "silver"}}>
                         <div class="collapse navbar-collapse" id="navbarNav">
-                            <span style={{fontWeight: 'bold'}} class="navbar-brand mb-0 h1"><img src="\images\favicon.png"></img>WEATHERING WITH ME</span>
+                        <img class="ms-4" src="\images\favicon.png"></img>
+                            <span style={{fontWeight: 'bold',fontFamily: 'Square Peg', fontSize: '30px'}} class="navbar-brand me-4 mb-0 h1"> &nbsp;Weathering With Me</span>
                             <NavList/>
                         </div>
                         <Logout/>
@@ -23,6 +23,7 @@ class App extends React.Component{
                         <Route path="/" element={<Home/>} />
                         <Route path="/favloc" element={<FavLoc/>} />
                         <Route path="/createaccount" element={<CreateAccount/>} />
+                        <Route path="/location" element={<Location_details />}/>
                         <Route path="*" element={<NoMatch/>} />
                     </Routes>
                 </div>
@@ -37,7 +38,7 @@ function LongLink({label, to}) {
     return (
     <li style={{listStyleType:'none'}}>
     {match && " "}
-        <Link style={{color:"#484848", textDecoration: 'none' , fontSize:"20px"}} to={to}>{label}</Link>
+        <Link style={{color:"#484848", textDecoration: 'none' , fontSize:"20px"}} to={to}>&nbsp;{label}</Link>
     </li>
     );
 }
@@ -53,10 +54,29 @@ function NoMatch() {
     );
 }
 
+class Location_details extends React.Component{
+    render(){
+        return(
+            <div class="container mt-3">
+                <h2>Location</h2>
+                <div class="gmap_canvas">{/*----------Use this link to generate the src https://google-map-generator.com/ ---------- */}
+                    <iframe width="100%" height="300" id="gmap_canvas" 
+                    src={"https://maps.google.com/maps?q=2880%20Broadway,%20New%20York&t=&z=13&ie=UTF8&iwloc=&output=embed"} 
+                    frameborder="0" scrolling="no" marginheight="0" marginwidth="0">
+                    </iframe>
+                </div>
+            </div>
+        );
+    }
+}
+
 
 class NavList extends React.Component{
     render(){
+
+    // a stub for detemining if the user is admin (todo: get from session if the user is admin)
      let isAdmin=0, isUser=1, isNonUser=0;{/*Set to 1 For testing diff user(!!!!!todo)*/}
+
         if(isAdmin==1)
             return(
                 <>{/*----------NavList for admin----------*/}
@@ -114,20 +134,25 @@ class Home extends React.Component {
                         <div class="col-7">
                             <div class='row'>
                                 <div class='col-6'>
+
                                 <form class="d-flex">{/*----------!!!!!to do: search for loc---------- */}
                                     <input class="form-control me-2" type="search" placeholder="Search for location" aria-label="Search"/>
                                     <button class="btn btn-dark" type="submit"><span class="material-icons">&#xE8B6;</span></button>
                                 </form>
+
                                 </div>
-                                <div class='col-6'>
-                                <form class="d-flex">{/*----------!!!!!To do: sorting using dropdown list---------- */}
-                                    <input class="form-control me-2" list="datalistOptions" id="exampleDataList" placeholder="Sort by"/>
-                                    <datalist id="datalistOptions">
-                                    <option value="opt1"/>
-                                    <option value="opt2"/>
-                                    <option value="opt3"/>
-                                    </datalist>
-                                </form>
+                                <p class='col-2 mb-0 mt-2 p-0 text-end'>Sort By:</p>
+
+                                <div class='col-4'>
+                                    <form class="d-flex">{/*----------!!!!!To do: sorting using dropdown list---------- */}
+                                        <select class="form-select" aria-label="Default select example">
+                                            <option value="opt0" selected>Name</option>
+                                            <option value="opt1">District</option>
+                                            <option value="opt2">East to West</option>
+                                            <option value="opt3">North to south</option>
+                                        </select>
+                                    </form>
+                                
                                 </div>
                             </div>
                             <Table/>{/*----------!!!!!todo: loc data tranfer by props??---------- */}
@@ -152,41 +177,40 @@ class Home extends React.Component {
   {/*-----Todo: table for both favloc and home (usemapping??)--------*/ }
 class Table extends React.Component{
     render() {
+        // a stub for creating location info (todo: get location info from database)
+        const data =[{num: 1 , locName: "New York", locLat: 40.712, locLong: -74.0059},
+        {num: 2 , locName: "Hong Kong", locLat: 22.302, locLong: 114.177},
+        {num: 3 , locName: "London", locLat: 51.507, locLong: -0.127}];
+
+        const listItems = data.map((data) => 
+            <tr>
+                <th scope="row">{data.num}</th>
+                <td>{data.locName}</td>
+                <td>{data.locLat}</td>
+                <td>{data.locLong}</td>
+            </tr>
+            );
+
         return(
             <>
             <table class="table table-hover">
                 <thead>
                     <tr>
                     <th scope="col">#</th>
-                    <th scope="col">First</th>
-                    <th scope="col">Last</th>
-                    <th scope="col">Handle</th>
+                    <th scope="col">Location</th>
+                    <th scope="col">Latitude</th>
+                    <th scope="col">Longitude</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                    <th scope="row">1</th>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
-                    </tr>
-                    <tr>
-                    <th scope="row">2</th>
-                    <td>Jacob</td>
-                    <td>Thornton</td>
-                    <td>@fat</td>
-                    </tr>
-                    <tr>
-                    <th scope="row">3</th>
-                    <td colspan="2">Larry the Bird</td>
-                    <td>@twitter</td>
-                    </tr>
+                    {listItems}
                 </tbody>
             </table>
             </>
         );
     }
 }
+
 class FavLoc extends React.Component {
     render() {
         return(
