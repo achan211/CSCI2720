@@ -44,6 +44,28 @@ db.once('open', function() {
       else res.send(e);
     })
   })
+
+  // Add User Comment
+
+  // User Favoriate Array
+
+  // Request Updated Data
+
+  // Login
+
+  // Logout
+
+  // Admin Retrieve Location (latlong and name)
+
+  // Admin Update Location (latlong and name)
+
+  // Admin delete Location
+
+  // Admin Retrieve User Data
+
+  // Admin Update User Data
+
+  // Admin delete User
 })
 // listen to port 3000
 const server = app.listen(3000);
