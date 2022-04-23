@@ -1,4 +1,3 @@
-
 const express = require('express'); 
 const app = express();
 const cors = require('cors');
@@ -40,14 +39,14 @@ db.once('open', function() {
   const Location = mongoose.model('Location', LocationSchema);
   const Comment = mongoose.model('Comment', CommentSchema);
 
-  // app.get('/', (req, res) => {
-  //   User.find((err, e) => {
-  //     if (err) res.send(err);
-  //     else res.send(e);
-  //   })
-  // })
-
   app.get('/', (req, res) => {
+    User.find((err, e) => {
+      if (err) res.send(err);
+      else res.send(e);
+    })
+  })
+  
+  app.get('/example', (req, res) => {
     fetch('http://api.weatherapi.com/v1/current.json?key=d73c8d825739428089d134440222304&q=London')
     .then(res => res.json())
     .then(text => res.send(text));
@@ -55,7 +54,6 @@ db.once('open', function() {
 
   //Example of getting JSON file from Weatherapi.com
   //So to get current weather for London: JSON: http://api.weatherapi.com/v1/current.json?key=d73c8d825739428089d134440222304&q=London
-
 
   // Add User Comment
 
