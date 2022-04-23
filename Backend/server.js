@@ -69,3 +69,7 @@ db.once('open', function() {
 })
 // listen to port 3000
 const server = app.listen(3000);
+
+//Example of getting JSON file from Weatherapi.com
+//So to get current weather for London: JSON: http://api.weatherapi.com/v1/current.json?key=<YOUR_API_KEY>&q=London
+//
