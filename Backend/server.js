@@ -45,12 +45,16 @@ db.once('open', function() {
       else res.send(e);
     })
   })
-  
+
   app.get('/example', (req, res) => {
     fetch('http://api.weatherapi.com/v1/current.json?key=d73c8d825739428089d134440222304&q=London')
     .then(res => res.json())
     .then(text => res.send(text));
   })
+
+  // Location: Hong-Kong, London, New-York, Tokyo, Osaka, Singapore, Taipei, Paris, Rome, Berlin, Asterdam, Seoul, Bangkok, Shanghai, Dubai
+
+  // Retrieve temp_c, wind_kph, wind_dir, humidity, precip_mm, vis_km
 
   //Example of getting JSON file from Weatherapi.com
   //So to get current weather for London: JSON: http://api.weatherapi.com/v1/current.json?key=d73c8d825739428089d134440222304&q=London
