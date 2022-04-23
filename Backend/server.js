@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 mongoose.connect('mongodb+srv://stu002:p233183-@csci2720.6hfif.mongodb.net/stu002'); // This is the mongoose connect line. 
 const bodyParser = require('body-parser');
 const res = require('express/lib/response');
+const fetch = require('node-fetch');
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(cors());
 
@@ -38,12 +39,22 @@ db.once('open', function() {
   const Location = mongoose.model('Location', LocationSchema);
   const Comment = mongoose.model('Comment', CommentSchema);
 
+  // app.get('/', (req, res) => {
+  //   User.find((err, e) => {
+  //     if (err) res.send(err);
+  //     else res.send(e);
+  //   })
+  // })
+
   app.get('/', (req, res) => {
-    User.find((err, e) => {
-      if (err) res.send(err);
-      else res.send(e);
-    })
+    fetch('http://api.weatherapi.com/v1/current.json?key=d73c8d825739428089d1344402223&q=London')
+    .then(res => res.json())
+    .then(text => res.send(text));
   })
+
+  //Example of getting JSON file from Weatherapi.com
+  //So to get current weather for London: JSON: http://api.weatherapi.com/v1/current.json?key=d73c8d825739428089d1344402223&q=London
+
 
   // Add User Comment
 
@@ -69,7 +80,3 @@ db.once('open', function() {
 })
 // listen to port 3000
 const server = app.listen(3000);
-
-//Example of getting JSON file from Weatherapi.com
-//So to get current weather for London: JSON: http://api.weatherapi.com/v1/current.json?key=<YOUR_API_KEY>&q=London
-//
