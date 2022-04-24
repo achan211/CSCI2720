@@ -56,7 +56,7 @@ db.once('open', function() {
   //Example of getting JSON file from Weatherapi.com
   //So to get current weather for London: JSON: http://api.weatherapi.com/v1/current.json?key=d73c8d825739428089d134440222304&q=London
 
-  // Add User Comment
+  // Add User Comment - DONE!
   app.post('/newComment', (req, res) => {
     var user_id
     var loc_id
@@ -101,7 +101,7 @@ db.once('open', function() {
     })
   })
 
-  // See Comment based on Location
+  // See Comment based on Location - DONE!
   app.get('/:locName/comment', (req, res) => {
     var loc_id
     Location.findOne({locName: req.params['locName']}, '_id').exec()
@@ -122,8 +122,31 @@ db.once('open', function() {
     })
   })
 
-  // User Favourite Array
-  // select a location, then add favourite 
+  // View User Favourite Array
+  app.get('/favourite/:username', (req, res) => {
+    User.findOne({username: req.params['username']}, '-_id favourite')
+    .populate('favourite', '-_id locName')
+    .exec()
+    .then(fav => {
+      var string = JSON.stringify(fav)
+      res.send(string)
+    })
+  })
+  
+  // Select a location, then add favourite
+  app.put('/favourite/:username/:locName', (req, res) => {
+    var loc_id
+    Location.findOne({locName: req.body['locName']}, '_id').exec()
+    .then((err, r) => {
+      loc_id = r._id
+      return loc_id
+    })
+    .then(() => {
+      User.findByIdAndUpdate({username: req.body['username']}, {
+        // add location to array
+      })
+    })
+  })
 
   // Request Updated Data
 
