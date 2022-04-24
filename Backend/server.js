@@ -42,7 +42,12 @@ db.once('open', function() {
   app.get('/', (req, res) => {
     User.find((err, e) => {
       if (err) res.send(err);
-      else res.send(e);
+      else {
+        var string = JSON.stringify(e, null, 1);
+        res.set('Content-Type', 'text/plain');
+        res.status(200);
+        res.send(string);
+      }
     })
   })
 
@@ -60,8 +65,54 @@ db.once('open', function() {
   //So to get current weather for London: JSON: http://api.weatherapi.com/v1/current.json?key=d73c8d825739428089d134440222304&q=London
 
   // Add User Comment
+  app.post('/newComment', (req, res) => {
+    var user_id
+    var loc_id
+    User.findOne({username: req.body['username']}, '_id').exec()
+    .then(r => {
+      user_id = r._id;
+      console.log(user_id);
+      return user_id;
+    })
+    .then(() => {
+      Location.findOne({locName: req.body['locName']}, '_id').exec()
+      .then(r => {
+        loc_id = r._id;
+        console.log(loc_id);
+        return loc_id;
+      })
+      .then(() => {
+        Comment.create({
+          user: user_id,
+          loc: loc_id,
+          comment: req.body['comment']
+        }).then(() => {
+          Comment.findOne({user: user_id, loc: loc_id}, '-_id user loc comment')
+          .populate('user', '-_id username')
+          .populate('loc', '-_id locName')
+          .exec((err, comment) => {
+            if (err) res.send(err)
+            else {
+              if (comment != null){
+                var string = JSON.stringify(comment, null, 1);
+                res.set('Content-Type', 'text/plain');
+                res.status(201);
+                res.send(string);
+              } else {
+                res.status(404);
+                res.send("Opps! Something went wrong!");
+              }
+            }
+          })
+        })
+      })
+    })
+  })
 
-  // User Favoriate Array
+  // See Comment
+
+  // User Favourite Array
+  // select a location, then add favourite 
 
   // Request Updated Data
 
@@ -81,6 +132,7 @@ db.once('open', function() {
 
   // Admin delete User
 })
+
 // listen to port 3000
 const server = app.listen(3000);
 
