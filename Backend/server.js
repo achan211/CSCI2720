@@ -101,7 +101,7 @@ db.once('open', function() {
     })
   })
 
-  // See Comment
+  // See Comment based on Location
   app.get('/:locName/comment', (req, res) => {
     var loc_id
     Location.findOne({locName: req.params['locName']}, '_id').exec()
