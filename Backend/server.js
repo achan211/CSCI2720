@@ -40,15 +40,7 @@ db.once('open', function() {
   const Comment = mongoose.model('Comment', CommentSchema);
 
   app.get('/', (req, res) => {
-    User.find((err, e) => {
-      if (err) res.send(err);
-      else {
-        var string = JSON.stringify(e, null, 1);
-        res.set('Content-Type', 'text/plain');
-        res.status(200);
-        res.send(string);
-      }
-    })
+    res.send("Hello! Welcome to Weathering with Me!")
   })
 
   app.get('/example', (req, res) => {
@@ -110,6 +102,25 @@ db.once('open', function() {
   })
 
   // See Comment
+  app.get('/:locName/comment', (req, res) => {
+    var loc_id
+    Location.findOne({locName: req.params['locName']}, '_id').exec()
+    .then((r) => {
+      loc_id = r._id
+    })
+    .then(() => {
+      Comment.find({loc: loc_id}, '-_id user loc comment')
+      .populate('user', '-_id username')
+      .populate('loc', '-_id locName')
+      .exec()
+      .then((r) => {
+        var string = JSON.stringify(r, null, 1);
+        res.set('Content-Type', 'text/plain');
+        res.status(200);
+        res.send(string);
+      })
+    })
+  })
 
   // User Favourite Array
   // select a location, then add favourite 
@@ -121,16 +132,29 @@ db.once('open', function() {
   // Logout
 
   // Admin Retrieve Location (latlong and name)
+  app.get('/loc/:locName', (req, res) => {
+    Location.findOne({locName: req.params['locName']}, '_id locName locLat locLong').exec()
+    .then(r => {
+      res.send(r);
+    })
+  })
 
   // Admin Update Location (latlong and name)
 
   // Admin delete Location
 
   // Admin Retrieve User Data
+  app.get('/user/:username', (req, res) => {
+    User.findOne({username: req.params['username']}, '_id username pwd admin favourite').exec()
+    .then(r => {
+      res.send(r);
+    })
+  })
 
   // Admin Update User Data
 
   // Admin delete User
+
 })
 
 // listen to port 3000
