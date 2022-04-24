@@ -15,7 +15,7 @@ class App extends React.Component{
                             <span style={{fontWeight: 'bold',fontFamily: 'Square Peg', fontSize: '30px'}} class="navbar-brand me-4 mb-0 h1"> &nbsp;Weathering With Me</span>
                             <NavList/>
                         </div>
-                        <Logout/>
+                        <Logout username="Admin"/>{/*----------todo:username----------*/}
                     </nav>
 
                     <Routes>
@@ -75,7 +75,7 @@ class NavList extends React.Component{
     render(){
 
     // a stub for detemining if the user is admin (todo: get from session if the user is admin)
-     let isAdmin=0, isUser=1, isNonUser=0;{/*Set to 1 For testing diff user(!!!!!todo)*/}
+     let isAdmin=0, isUser=0, isNonUser=1;{/*Set to 1 For testing diff user(!!!!!todo)*/}
 
         if(isAdmin==1)
             return(
@@ -103,20 +103,24 @@ class NavList extends React.Component{
 }
 
 class Logout extends React.Component {
-
+    // a stub for detemining if the user is admin (todo: get from session if the user is admin)
+    
     render() {
+        let isAdmin=0, isUser=0, isNonUser=1;//Set to 1 For testing diff user(!!!!!todo)*/}
         return(
-            <>
+            <>{isNonUser!=1 &&
                 <li style={{listStyleType:'none'}} class="nav-item dropdown">{/*dropdown for logout*/}
+                
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    
-                    {/*__________Todo: username???????&& !display when isNonUser  */}
-                    <span style={{float:"right",color:'#484848'}}><i style={{color:'#484848'}} class="material-icons">&#xE853;</i>Hi, Username!&nbsp;&nbsp;&nbsp;</span>
+                    <span style={{float:"right",color:'#484848'}}><i style={{color:'#484848'}} class="material-icons">&#xE853;</i>Hi, {this.props.username}!&nbsp;&nbsp;&nbsp;</span>
                 </a>
+                
+
                 <ul style={{backgroundColor: "silver"}} class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
                 <LongLink to="/login" label="&nbsp;&nbsp; &nbsp;&nbsp;Logout" />
                 </ul>
-                </li>   
+                </li> 
+                }  
             </>
         );
     }
@@ -174,7 +178,7 @@ class Home extends React.Component {
         );
     }
   }
-  {/*-----Todo: table for both favloc and home (usemapping??)--------*/ }
+  {/*-----Todo: table for both favloc and home */ }
 class Table extends React.Component{
     render() {
         // a stub for creating location info (todo: get location info from database)
