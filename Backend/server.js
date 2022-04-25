@@ -137,13 +137,24 @@ db.once('open', function() {
   app.put('/favourite/:username/:locName', (req, res) => {
     var loc_id
     Location.findOne({locName: req.body['locName']}, '_id').exec()
-    .then((err, r) => {
+    .then(r => {
       loc_id = r._id
-      return loc_id
     })
     .then(() => {
-      User.findByIdAndUpdate({username: req.body['username']}, {
+      console.log(loc_id)
+      User.findOneAndUpdate({username: req.body['username']}, {
         // add location to array
+        $addToSet: {
+          favourite: loc_id
+        }
+      }).exec()
+      .then(r => {
+        if (r != null) {
+          User.find({username: req.body['username']}, '-_id username favourite').exec()
+          .then(r => {
+            res.send(r)
+          })
+        }
       })
     })
   })
