@@ -25,22 +25,27 @@
     </body>
     <script>
         function loadComment(){
+            document.querySelector("#commentSpace").innerHTML = ""
             let locName = document.querySelector('#locName').value;
             fetch("http://localhost:3000/" + locName + "/comment")
             .then(res => res.json())
             .then(data => {
-                // Loop User's Comments
-                for (let x in data){
-                    console.log("The user " + data[x].user.username + " has placed a comment for " + data[x].loc.locName + " regarding " + data[x].comment)
+                if (data.length != 0) {
+                    // Loop User's Comments
+                    for (let x in data){
+                        console.log("The user " + data[x].user.username + " has placed a comment for " + data[x].loc.locName + " regarding " + data[x].comment)
 
-                    let newComment = document.createElement("div");
-                    let element = '<h3></h3><p></p>';
-                    newComment.innerHTML = element;
+                        let newComment = document.createElement("div");
+                        let element = '<h3></h3><p></p>';
+                        newComment.innerHTML = element;
 
-                    newComment.querySelector("h3").innerHTML = data[x].user.username;
-                    newComment.querySelector("p").innerHTML = data[x].comment;
+                        newComment.querySelector("h3").innerHTML = data[x].user.username;
+                        newComment.querySelector("p").innerHTML = data[x].comment;
 
-                    document.querySelector("#commentSpace").appendChild(newComment);
+                        document.querySelector("#commentSpace").appendChild(newComment);
+                    }
+                } else {
+                    document.querySelector("#commentSpace").innerHTML = "This Location has no comments. "
                 }
             })
         }

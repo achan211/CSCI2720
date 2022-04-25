@@ -106,7 +106,7 @@ db.once('open', function() {
     var loc_id
     Location.findOne({locName: req.params['locName']}, '_id').exec()
     .then((r) => {
-      loc_id = r._id
+      if (r!= null) loc_id = r._id
     })
     .then(() => {
       Comment.find({loc: loc_id}, '-_id user loc comment')
@@ -128,8 +128,7 @@ db.once('open', function() {
     .populate('favourite', '-_id locName')
     .exec()
     .then(fav => {
-      var string = JSON.stringify(fav)
-      res.send(string)
+      res.send(JSON.stringify(fav.favourite))
     })
   })
   
