@@ -163,30 +163,254 @@ db.once('open', function() {
   // Login
 
   // Logout
+  
+  // Admin Create Location (create by locat name)-->DONE
+  app.post("/location/:locName", (req, res) => {
+    var name = req.params["locName"];
+    var link =
+      `http://api.weatherapi.com/v1/current.json?key=${api_key}&q=` + name;
+    fetch(link)
+      .then((res) => res.json())
+      .then((text) => {
+        if (text.error) {
+          res.status(404).send("Location does not exist");
+        } else {
+          Location.create({
+            locName: text.location.name,
+            locLat: text.location.lat,
+            locLong: text.location.lon,
+          }).then(
+            (results) => {
+              res.status(201).send("Ref: " + results);
+            },
+            (err) => {
+              res.contentType("text/plain");
+              res.send(err);
+            }
+          );
+        }
+      })
+      .catch((error) => {
+        res.status(404).send("Getting Error");
+      });
+  });
 
-  // Admin Retrieve Location (latlong and name)
-  app.get('/loc/:locName', (req, res) => {
-    Location.findOne({locName: req.params['locName']}, '_id locName locLat locLong').exec()
-    .then(r => {
-      res.send(r);
-    })
-  })
+  // Admin Retrieve Location (latlong and name) -->DONE
+  app.get("/location/:locat", (req, res) => {
+    var loc = req.params["locat"];
+    var link =
+      `http://api.weatherapi.com/v1/current.json?key=${api_key}&q=` + loc;
+    fetch(link)
+      .then((res) => res.json())
+      .then((text) => {
+        if (text.error) {
+          res.status(404).send("Location does not exist");
+        } else {
+          var data = {
+            Name: text.location.name,
+            Latitude: text.location.lat,
+            Longitude: text.location.lon,
+            Temperature: text.current.temp_c,
+            Wind_speed: text.current.wind_kph,
+            Wind_direction: text.current.wind_dir,
+            Humidity: text.current.humidity,
+            Precipitation: text.current.precip_mm,
+            Visibility: text.current.vis_km,
+          };
+          res.send(JSON.stringify(data, null, "\t"));
+        }
+      })
+      .catch((error) => {
+        res.status(404).send("Getting Error");
+      });
+  });
 
   // Admin Update Location (latlong and name)
+  app.put("/location/:locat", (req, res) => {
+    var loc = req.params["locat"];
+    var link =
+      `http://api.weatherapi.com/v1/current.json?key=${api_key}&q=` + loc;
+    fetch(link)
+      .then((res) => res.json())
+      .then((text) => {
+        if (text.error) {
+          res.status(404).send("Location does not exist");
+        } else {
+          Location.findOneAndUpdate(
+            { locName: req.params["locat"] },
+            {
+              locName: text.location.name,
+              locLat: text.location.lat,
+              locLong: text.location.lon,
+            }
+          )
+            .exec()
+            .then(
+              (re) => {
+                if (re == null) {
+                  res.contentType("text/plain");
+                  res
+                    .status(404)
+                    .send("This event is not existed.\n404 Not Found\n");
+                } else {
+                  res.contentType("text/plain");
+                  res.send("Ref: " + re);
+                }
+              },
+              (err) => {
+                res.contentType("text/plain");
+                res.send(err);
+              }
+            );
+        }
+      })
+      .catch((error) => {
+        res.status(404).send("Getting Error");
+      });
+  });
 
-  // Admin delete Location
+  // Admin delete Location (search by locat name)-->DONE
 
-  // Admin Retrieve User Data
-  app.get('/user/:username', (req, res) => {
-    User.findOne({username: req.params['username']}, '_id username pwd admin favourite').exec()
-    .then(r => {
-      res.send(r);
-    })
-  })
+  app.delete("/location/:locat", (req, res) => {
+    var query = Location.findOne({ locName: req.params["locat"] });
+    query.exec().then(
+      (results) => {
+        if (results == null) {
+          res.contentType("text/plain");
+          res
+            .status(404)
+            .send("This location is not existed.\n404 Not Found\n");
+        } else {
+          Location.deleteOne({ _id: results._id }).then(
+            function () {
+              res.status(204).send("204 No Content");
+            },
+            (error) => {
+              res.contentType("text/plain");
+              res.send(error);
+            }
+          );
+        }
+      },
+      (err) => {
+        res.contentType("text/plain");
+        res.send(err);
+      }
+    );
+  });
+
+  //Admin Create User
+  app.post("/user", (req, res) => {
+    if (req.body["admin"] == "false") {
+      var Admin = false;
+    } else if (req.body["admin"] == "true") {
+      var Admin = true;
+    } else {
+      var Admin = null;
+    }
+    if (Admin != null) {
+      User.create({
+        username: req.body["username"],
+        pwd: req.body["pwd"],
+        admin: Admin,
+      }).then(
+        (results) => {
+          res.status(201).send("Ref: " + results);
+        },
+        (err) => {
+          res.contentType("text/plain");
+          res.send(err);
+        }
+      );
+    } else {
+      res.status(404).send("Cannot create user");
+    }
+  });
+
+  // Admin Retrieve User Data // search query
+  app.get("/user", (req, res) => {
+    //req.query
+    console.log(req.query)
+    var query = User.findOne({
+      username: req.query["username"],
+      pwd: req.query["pwd"],
+    });
+
+    query.select("-_id username admin favourite");
+    query.populate('favourite', '-_id locName').exec().then(
+      (results) => {
+        if (results == null) res.send("There is no user available");
+        else {
+          var event = JSON.stringify(results, null, "\t");
+          res.send(event);
+          
+        }
+      },
+      (error) => {
+        res.contentType("text/plain");
+        res.send(error);
+      }
+    );
+  });
 
   // Admin Update User Data
+  // Can user update favourite location?
+  // this part assume not ok, on;y update username, pwd and admin?
+  app.put("/user", (req, res) => {
+    //req.query
+    var query = Location.findOneAndUpdate(
+      { username: req.body["username"], pwd: req.body["pwd"] },
+      {
+        username: req.body["username"],
+        pwd: req.body["pwd"],
+        admin: req.body["admin"],
+      }
+    );
+    query.exec().then(
+      (results) => {
+        if (results == null) res.send("There is no user available");
+        else {
+          res.contentType("text/plain");
+          var event = JSON.stringify(results, null, "\t");
+          res.send(event);
+        }
+      },
+      (error) => {
+        res.contentType("text/plain");
+        res.send(error);
+      }
+    );
+  });
 
   // Admin delete User
+  app.delete("/user/:username", (req, res) => {
+    var query = User.findOne({ username: req.params["username"] });
+    query.exec().then(
+      (results) => {
+        if (results == null) {
+          res.contentType("text/plain");
+          res
+            .status(404)
+            .send("This user is not existed.\n404 Not Found\n");
+        } else {
+          User.deleteOne({ _id: results._id }).then(
+            function () {
+              res.status(204).send("204 No Content");
+            },
+            (error) => {
+              res.contentType("text/plain");
+              res.send(error);
+            }
+          );
+        }
+      },
+      (err) => {
+        res.contentType("text/plain");
+        res.send(err);
+      }
+    );
+  });
+
 
 })
 
