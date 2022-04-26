@@ -361,8 +361,8 @@ db.once('open', function() {
     var query = Location.findOneAndUpdate(
       { username: req.body["username"], pwd: req.body["pwd"] },
       {
-        username: req.body["username"],
-        pwd: req.body["pwd"],
+        username: req.body["newusername"],
+        pwd: req.body["newpwd"],
         admin: req.body["admin"],
       }
     );
