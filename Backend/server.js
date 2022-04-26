@@ -302,17 +302,17 @@ db.once('open', function() {
   //Admin Create User-->DONE
   app.post("/user", (req, res) => {
     if (req.body["admin"] == "false") {
-      var Admin = false;
+      var Ad = false;
     } else if (req.body["admin"] == "true") {
-      var Admin = true;
+      var Ad = true;
     } else {
-      var Admin = null;
+      var Ad = null;
     }
-    if (Admin != null) {
+    if (Ad != null) {
       User.create({
         username: req.body["username"],
         pwd: req.body["pwd"],
-        admin: Admin,
+        admin: Ad,
       }).then(
         (results) => {
           res.status(201).send("Ref: " + results);
