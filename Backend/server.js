@@ -225,7 +225,7 @@ db.once('open', function() {
       });
   });
 
-  // Admin Update Location (latlong and name)
+  // Admin Update Location (latlong and name)-->DONE
   app.put("/location/:locat", (req, res) => {
     var loc = req.params["locat"];
     var link =
@@ -299,7 +299,7 @@ db.once('open', function() {
     );
   });
 
-  //Admin Create User
+  //Admin Create User-->DONE
   app.post("/user", (req, res) => {
     if (req.body["admin"] == "false") {
       var Admin = false;
@@ -327,10 +327,10 @@ db.once('open', function() {
     }
   });
 
-  // Admin Retrieve User Data // search query
+  // Admin Retrieve User Data // search query-->DONE
   app.get("/user", (req, res) => {
     //req.query
-    console.log(req.query)
+    //console.log(req.query)
     var query = User.findOne({
       username: req.query["username"],
       pwd: req.query["pwd"],
@@ -353,9 +353,9 @@ db.once('open', function() {
     );
   });
 
-  // Admin Update User Data
+  // Admin Update User Data -->DONE
   // Can user update favourite location?
-  // this part assume not ok, on;y update username, pwd and admin?
+  // this part assume not ok
   app.put("/user", (req, res) => {
     //req.query
     var query = Location.findOneAndUpdate(
@@ -382,7 +382,7 @@ db.once('open', function() {
     );
   });
 
-  // Admin delete User
+  // Admin delete User-->DONE
   app.delete("/user/:username", (req, res) => {
     var query = User.findOne({ username: req.params["username"] });
     query.exec().then(
