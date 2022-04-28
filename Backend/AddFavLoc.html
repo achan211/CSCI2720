@@ -14,7 +14,7 @@
             let locName = document.querySelector('#locName').value;
 
             let bodytext = "username=" + username + "&locName=" + locName
-            fetch("http://localhost:3000/favourite/" + username + "/" + locName, {
+            fetch("http://localhost:5000/favourite/" + username + "/" + locName, {
                 method: "PUT", 
                 headers: {"Content-Type": "application/x-www-form-urlencoded"},
                 body: bodytext})

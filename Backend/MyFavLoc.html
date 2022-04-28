@@ -9,7 +9,7 @@
     <script>
         function loadFavourite(){
             let username = document.querySelector('#username').value;
-            fetch("http://localhost:3000/favourite/" + username)
+            fetch("http://localhost:5000/favourite/" + username)
             .then(res => res.json())
             .then(data => {
                 if (data.length == 0){
