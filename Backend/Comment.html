@@ -27,7 +27,7 @@
         function loadComment(){
             document.querySelector("#commentSpace").innerHTML = ""
             let locName = document.querySelector('#locName').value;
-            fetch("http://localhost:5000/" + locName + "/comment")
+            fetch("http://localhost:4000/" + locName + "/comment")
             .then(res => res.json())
             .then(data => {
                 if (data.length != 0) {
@@ -57,7 +57,7 @@
             // Updating Server
             let bodytext = "username=" + username + "&locName=" + locName + "&comment=" + comment
 
-            fetch("http://localhost:5000/newComment", {
+            fetch("http://localhost:4000/newComment", {
                 method: "POST", 
                 headers: {"Content-Type": "application/x-www-form-urlencoded"},
                 body: bodytext})

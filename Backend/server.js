@@ -1,4 +1,4 @@
-// Use Port 5000!
+// Use Port 4000!
 
 const express = require('express'); 
 const app = express();
@@ -417,7 +417,7 @@ db.once('open', function() {
 })
 
 // listen to port 5000
-const server = app.listen(5000);
+const server = app.listen(4000);
 
 // Step 1 create folder
 // npm init
