@@ -134,7 +134,7 @@ db.once('open', function() {
     })
   })
   
-  // Select a location, then add favourite
+  // Select a location, then add favourite - DONE!
   app.put('/favourite/:username/:locName', (req, res) => {
     var loc_id
     Location.findOne({locName: req.body['locName']}, '_id').exec()
