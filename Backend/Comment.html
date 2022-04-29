@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+    <body>
+        <h1>Comment System</h1>
+        <hr>
+        <h3>Instructions: </h3>
+        <p>Be Sure to enter a location name before adding your comments! </p>
+        <hr>
+        <label for="locName">Enter a Location Name: </label>
+        <input type="text" id="locName" name="locName">
+        <button onclick="loadComment()">Load Comments</button>
+        <div id="commentSpace"></div>
+        <hr>
+        <div id="newCommentSpace">
+            <h2>New Comment</h2>
+            <label for="username">Enter your Username: </label>
+            <input type="text" id="username" name="username">
+            <br /><br />
+
+            <label for="comment">Write your Comments: </label>
+            <br><textarea id="comment" name="comment" rows="4" cols="50"></textarea><br />
+
+            <button onclick="addComment()">Add Comment</button>
+        </div>
+    </body>
+    <script>
+        function loadComment(){
+            document.querySelector("#commentSpace").innerHTML = ""
+            let locName = document.querySelector('#locName').value;
+            fetch("http://localhost:4000/" + locName + "/comment")
+            .then(res => res.json())
+            .then(data => {
+                if (data.length != 0) {
+                    // Loop User's Comments
+                    for (let x in data){
+                        console.log("The user " + data[x].user.username + " has placed a comment for " + data[x].loc.locName + " regarding " + data[x].comment)
+
+                        let newComment = document.createElement("div");
+                        let element = '<h3></h3><p></p>';
+                        newComment.innerHTML = element;
+
+                        newComment.querySelector("h3").innerHTML = data[x].user.username;
+                        newComment.querySelector("p").innerHTML = data[x].comment;
+
+                        document.querySelector("#commentSpace").appendChild(newComment);
+                    }
+                } else {
+                    document.querySelector("#commentSpace").innerHTML = "This Location has no comments. "
+                }
+            })
+        }
+        function addComment(){
+            let username = document.querySelector('#username').value;
+            let locName = document.querySelector('#locName').value;
+            let comment = document.querySelector('#comment').value;
+
+            // Updating Server
+            let bodytext = "username=" + username + "&locName=" + locName + "&comment=" + comment
+
+            fetch("http://localhost:4000/newComment", {
+                method: "POST", 
+                headers: {"Content-Type": "application/x-www-form-urlencoded"},
+                body: bodytext})
+            .then(res => res.text())
+            .then(data => console.log(data))
+
+            // Adding new Comment to FrontEnd
+            let newComment = document.createElement("div");
+            let element = '<h3></h3><p></p>';
+            newComment.innerHTML = element;
+
+            newComment.querySelector("h3").innerHTML = username;
+            newComment.querySelector("p").innerHTML = comment;
+
+            document.querySelector("#commentSpace").appendChild(newComment);
+        }
+    </script>
+</html>

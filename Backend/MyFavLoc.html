@@ -1,0 +1,34 @@
+<html>
+    <body>
+        <h1>My Favourite Locations</h1>
+        <label for="username">Enter your username: </label>
+        <input type="text" id="username" name="username">
+        <button onclick="loadFavourite()">Load My Favourite Locations</button>
+        <div id="ph"></div>
+    </body>
+    <script>
+        function loadFavourite(){
+            let username = document.querySelector('#username').value;
+            fetch("http://localhost:4000/favourite/" + username)
+            .then(res => res.json())
+            .then(data => {
+                if (data.length == 0){
+                    document.querySelector('#ph').innerHTML = "You have no favourite location."
+                } else {
+                    // List out all favourite locations
+                    document.querySelector('#ph').innerHTML = "Your favourite locations are: "
+                    for (let x in data) {
+                        console.log(data[x].locName)
+                        let newFav = document.createElement("div");
+                        let element = '<h3></h3>';
+                        newFav.innerHTML = element;
+
+                        newFav.querySelector("h3").innerHTML = data[x].locName;
+
+                        document.querySelector("#ph").appendChild(newFav);
+                    }
+                }
+            })
+        }
+    </script>
+</html>
