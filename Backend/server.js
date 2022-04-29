@@ -6,6 +6,7 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 mongoose.connect('mongodb+srv://stu002:p233183-@csci2720.6hfif.mongodb.net/stu002'); // This is the mongoose connect line. 
 const bodyParser = require('body-parser');
+const bcrypt = require("bcryptjs");
 const res = require('express/lib/response');
 const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
 app.use(bodyParser.urlencoded({extended: false}));
@@ -50,6 +51,45 @@ db.once('open', function() {
     .then(res => res.json())
     .then(text => res.send(text));
   })
+
+  app.post("/login", (req, res) => {
+    // Form validation
+  
+    if (req.body['username'].length<4||req.body['username'].length>20) {
+      return res.status(400).json("wrong name length");
+    }
+
+    if (req.body["pwd"].length<4||req.body['pwd'].length>20) {
+      return res.status(400).json("wrong password length");
+    }
+  //  username: req.body["username"],
+   // pwd: req.body["pwd"],
+   // admin: Ad,
+    const password = req.body.pwd;
+  // Find user by email
+    User.findOne({ username: req.body['username'] }).then(user => {
+      // Check if user exists
+
+    
+      if (user==null) {
+        return res.status(404).json({ emailnotfound: "user not found" });
+      }
+  // Check password
+      bcrypt.compare(password, user.pwd).then(isMatch => {
+        if (isMatch) {
+         
+        res.setHeader('Set-Cookie','loggined=true');
+        res.send('login successful')
+        } else {
+          return res
+            .status(400)
+            .json({ passwordincorrect: "Password incorrect" });
+        }
+      });
+    });
+  });
+
+
 
   // Location: Hong-Kong, London, New-York, Tokyo, Osaka, Singapore, Taipei, Paris, Rome, Berlin, Asterdam, Seoul, Bangkok, Shanghai, Dubai
 
@@ -311,11 +351,20 @@ db.once('open', function() {
       var Ad = null;
     }
     if (Ad != null) {
-      User.create({
+
+      const newUser = new User({
         username: req.body["username"],
         pwd: req.body["pwd"],
         admin: Ad,
-      }).then(
+      });
+
+
+      bcrypt.genSalt(10, (err, salt) => {
+        bcrypt.hash(newUser. pwd, salt, (err, hash) => {
+          if (err) throw err;
+          newUser. pwd = hash;
+          newUser
+            .save().then(
         (results) => {
           res.status(201).send("Ref: " + results);
         },
@@ -324,7 +373,9 @@ db.once('open', function() {
           res.send(err);
         }
       );
-    } else {
+    });
+  });}
+  else {
       res.status(404).send("Cannot create user");
     }
   });
