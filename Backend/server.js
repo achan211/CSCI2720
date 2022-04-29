@@ -72,7 +72,7 @@ db.once('open', function() {
 
     
       if (user==null) {
-        return res.status(404).json({ emailnotfound: "user not found" });
+        return res.status(404).json({ Usernotfound: "user not found" });
       }
   // Check password
       bcrypt.compare(password, user.pwd).then(isMatch => {
