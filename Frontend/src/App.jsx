@@ -276,23 +276,23 @@ class Home extends React.Component {
 }
 function Table() {
   // a stub for creating location info (todo: get location info from database)
-//   const data =[{num: 1 , locName: "New York", locLat: 40.712, locLong: -74.0059},
-//   {num: 2 , locName: "Hong Kong", locLat: 22.302, locLong: 114.177},
-//   {num: 3 , locName: "London", locLat: 51.507, locLong: -0.127}];
-const [data, setData] = useState([]);
-React.useEffect(() => {
+  //   const data =[{num: 1 , locName: "New York", locLat: 40.712, locLong: -74.0059},
+  //   {num: 2 , locName: "Hong Kong", locLat: 22.302, locLong: 114.177},
+  //   {num: 3 , locName: "London", locLat: 51.507, locLong: -0.127}];
+  const [data, setData] = useState([]);
+  React.useEffect(() => {
     fetch("/location")
       .then((res) => res.json())
       .then((text) => {
-          for (let index = 0; index < text.length; index++) {
-              var d={
-                  num: index+1,
-                  locName: text[index].locName,
-                  locLat: text[index].locLat,
-                  locLong: text[index].locLong,
-              }
-              setData(olddata =>[...olddata,d])
-          }         
+        for (let index = 0; index < text.length; index++) {
+          var d = {
+            num: index + 1,
+            locName: text[index].locName,
+            locLat: text[index].locLat,
+            locLong: text[index].locLong,
+          };
+          setData((olddata) => [...olddata, d]);
+        }
       });
   }, []);
 
