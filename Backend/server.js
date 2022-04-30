@@ -52,6 +52,10 @@ db.once('open', function() {
     .then(text => res.send(text));
   })
 
+  // Request Updated Data
+
+  // Login - DONE!
+
   app.post("/login", (req, res) => {
     // Form validation
   
@@ -164,6 +168,8 @@ db.once('open', function() {
     })
   })
 
+  // Logout
+
   // View User Favourite Array - DONE!
   app.get('/favourite/:username', (req, res) => {
     User.findOne({username: req.params['username']}, '-_id favourite')
@@ -199,12 +205,6 @@ db.once('open', function() {
       })
     })
   })
-
-  // Request Updated Data
-
-  // Login
-
-  // Logout
   
   // Admin Create Location (create by locat name)-->DONE
   app.post("/location/:locName", (req, res) => {
