@@ -2,6 +2,7 @@
 
 const express = require('express'); 
 const app = express();
+const path = require('path');
 const cors = require('cors');
 const mongoose = require('mongoose');
 mongoose.connect('mongodb+srv://stu002:p233183-@csci2720.6hfif.mongodb.net/stu002'); // This is the mongoose connect line. 
@@ -10,7 +11,8 @@ const res = require('express/lib/response');
 const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(cors());
-
+app.use(express.static(path.resolve(__dirname,'../frontend/build')))
+const api_key = "d73c8d825739428089d134440222304"
 const db = mongoose.connection;
 // Upon connection fail
 db.on('error', console.error.bind(console, 'Connection error:'));
@@ -41,16 +43,58 @@ db.once('open', function() {
   const Location = mongoose.model('Location', LocationSchema);
   const Comment = mongoose.model('Comment', CommentSchema);
 
-  app.get('/', (req, res) => {
-    var string = JSON.stringify("Hello! Welcome to Weathering with Me!")
-    res.send(string)
-  })
+//   app.get('/', (req, res) => {
+//     res.send("Hello! Welcome to Weathering with Me!")
+//   })
 
   app.get('/example', (req, res) => {
     fetch('http://api.weatherapi.com/v1/current.json?key=d73c8d825739428089d134440222304&q=London')
     .then(res => res.json())
     .then(text => res.send(text));
   })
+
+  // Request Updated Data
+
+  // Login - DONE!
+
+  app.post("/login", (req, res) => {
+    // Form validation
+  
+    if (req.body['username'].length<4||req.body['username'].length>20) {
+      return res.status(400).json("wrong name length");
+    }
+
+    if (req.body["pwd"].length<4||req.body['pwd'].length>20) {
+      return res.status(400).json("wrong password length");
+    }
+  //  username: req.body["username"],
+   // pwd: req.body["pwd"],
+   // admin: Ad,
+    const password = req.body.pwd;
+  // Find user by email
+    User.findOne({ username: req.body['username'] }).then(user => {
+      // Check if user exists
+
+    
+      if (user==null) {
+        return res.status(404).json({ Usernotfound: "user not found" });
+      }
+  // Check password
+      bcrypt.compare(password, user.pwd).then(isMatch => {
+        if (isMatch) {
+         
+        res.setHeader('Set-Cookie','loggined=true');
+        res.send('login successful')
+        } else {
+          return res
+            .status(400)
+            .json({ passwordincorrect: "Password incorrect" });
+        }
+      });
+    });
+  });
+
+
 
   // Location: Hong-Kong, London, New-York, Tokyo, Osaka, Singapore, Taipei, Paris, Rome, Berlin, Asterdam, Seoul, Bangkok, Shanghai, Dubai
 
@@ -125,6 +169,8 @@ db.once('open', function() {
     })
   })
 
+  // Logout
+
   // View User Favourite Array - DONE!
   app.get('/favourite/:username', (req, res) => {
     User.findOne({username: req.params['username']}, '-_id favourite')
@@ -160,12 +206,6 @@ db.once('open', function() {
       })
     })
   })
-
-  // Request Updated Data
-
-  // Login
-
-  // Logout
   
   // Admin Create Location (create by locat name)-->DONE
   app.post("/location/:locName", (req, res) => {
@@ -226,6 +266,28 @@ db.once('open', function() {
       .catch((error) => {
         res.status(404).send("Getting Error");
       });
+  });
+
+  //retireve all Location name
+  app.get("/location", (req, res) => {
+    var query = Location.find();
+    query.select("-_id locName locLat locLong");
+    query.exec().then(
+      (results) => {
+        if (results == null) {
+          res
+            .status(404)
+            .send("This location is not existed.\n404 Not Found\n");
+        } else {
+          res.send(results)
+        }
+      },
+      (err) => {
+        res.contentType("text/plain");
+        res.send(err);
+      }
+    );
+
   });
 
   // Admin Update Location (latlong and name)-->DONE
@@ -312,11 +374,20 @@ db.once('open', function() {
       var Ad = null;
     }
     if (Ad != null) {
-      User.create({
+
+      const newUser = new User({
         username: req.body["username"],
         pwd: req.body["pwd"],
         admin: Ad,
-      }).then(
+      });
+
+
+      bcrypt.genSalt(10, (err, salt) => {
+        bcrypt.hash(newUser. pwd, salt, (err, hash) => {
+          if (err) throw err;
+          newUser. pwd = hash;
+          newUser
+            .save().then(
         (results) => {
           res.status(201).send("Ref: " + results);
         },
@@ -325,7 +396,9 @@ db.once('open', function() {
           res.send(err);
         }
       );
-    } else {
+    });
+  });}
+  else {
       res.status(404).send("Cannot create user");
     }
   });
@@ -414,11 +487,22 @@ db.once('open', function() {
     );
   });
 
+  app.get("/api", (req, res) => {
+    res.json({message:"Hello from sever"})
+  });
+
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname,'../frontend/build'))
+  });
+
 
 })
 
 // listen to port 5000
-const server = app.listen(4000);
+const PORT = 4000
+const server = app.listen(PORT,()=>{
+  console.log(`Server listening on ${PORT}`);
+});
 
 // Step 1 create folder
 // npm init
