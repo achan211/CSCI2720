@@ -43,17 +43,28 @@ db.once('open', function() {
   const Location = mongoose.model('Location', LocationSchema);
   const Comment = mongoose.model('Comment', CommentSchema);
 
-//   app.get('/', (req, res) => {
-//     res.send("Hello! Welcome to Weathering with Me!")
-//   })
-
   app.get('/example', (req, res) => {
     fetch('http://api.weatherapi.com/v1/current.json?key=d73c8d825739428089d134440222304&q=London')
     .then(res => res.json())
     .then(text => res.send(text));
   })
 
-  // Request Updated Data
+  // TO DO - Urgent: 
+  // Search for Location (Backend), 
+  // Seperate View for Each Locations (Frontend)
+  // Admin CRUD Page for Users and Locations (Frontend)
+  // index.html now showing what????? (Frontend)
+  // Sorting based locName, locLong, locLat (Frontend)
+  // Favourite Location View, and Add Favourite Button
+  // Show username and Login/Logout (Jimmy - Session / Backend?)
+  // Admin have button at seperate Location views to refresh Location temperature data (Frontend for button, Backend for update data)
+  // function Login (Frontend + Jimmy) 
+
+  // TO DO - Not very urgent but Urgent: 
+  // Think think how VM works (ALL)
+  // Project Documentations (ALL)
+  // Include full names and student IDs of all members in all code files using comments. (ALL)
+
 
   // Login - DONE!
 
@@ -93,8 +104,6 @@ db.once('open', function() {
       });
     });
   });
-
-
 
   // Location: Hong-Kong, London, New-York, Tokyo, Osaka, Singapore, Taipei, Paris, Rome, Berlin, Asterdam, Seoul, Bangkok, Shanghai, Dubai
 

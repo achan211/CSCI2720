@@ -163,7 +163,7 @@ class Logout extends React.Component {
   render() {
     let isAdmin = 0,
       isUser = 1,
-      isNonUser = 0; //Set to 1 For testing diff user(!!!!!todo)*/}
+      isNonUser = 0; //Set to 1 For testing diff user(!!!!!todo)
     return (
       <>
         {isNonUser != 1 && (
