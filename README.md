@@ -1,4 +1,6 @@
-# CSCI2720
+# CSCI2720 Project - Weathering with Me
+
+## Instructions
 To open this file, do the following steps: 
 
 Step 1: Pull ALL files  
