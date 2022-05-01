@@ -190,7 +190,7 @@ db.once('open', function() {
   // View User Favourite Array - DONE!
   app.get('/favourite/:username', (req, res) => {
     User.findOne({username: req.params['username']}, '-_id favourite')
-    .populate('favourite', '-_id locName')
+    .populate('favourite', '-_id locName locLat locLong')
     .exec()
     .then(fav => {
       res.send(JSON.stringify(fav.favourite))

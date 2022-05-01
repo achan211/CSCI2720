@@ -231,15 +231,14 @@ function Home() {
         <form class="d-flex">
         {/*----------!!!!!To do: sorting using dropdown list---------- */}
         <select class="form-select" aria-label="Default select example">
-          <option value="opt0" selected>Name</option>
-          <option value="opt1">District</option>
-          <option value="opt2">East to West</option>
-          <option value="opt3">North to south</option>
+          <option value="locName" selected>Location Name</option>
+          <option value="logLat">Latitude</option>
+          <option value="logLong">Longitude</option>
          </select>
          </form>
          </div>
         </div>
-        <Datatable data={search(data)} />
+        <Datatable fData={search(data)} />
         {/*----------!!!!!todo: loc data tranfer by props??---------- */}
             </div>
             <div class="col-5">
@@ -267,20 +266,21 @@ function Home() {
   )
 }
 
-function Datatable({ data }) {
-  const columns = data[0] && Object.keys(data[0])
+function Datatable({ fData }) {
+  const columns = fData[0] && Object.keys(fData[0])
+  
   return (
     <>
     <table class="table table-hover">
       <thead>
         <tr>
-          <th scope="col">Location</th>
+          <th scope="col">Location Name</th>
           <th scope="col">Latitude</th>
           <th scope="col">Longitude</th>
         </tr>
       </thead>
       <tbody>
-        {data.map(row => <tr>
+        {fData.map(row => <tr>
           {
           columns.map(column => <td>{row[column]}</td>)
           }
@@ -298,7 +298,7 @@ function Table() {
   //   {num: 3 , locName: "London", locLat: 51.507, locLong: -0.127}];
   const [data, setData] = useState([]);
   React.useEffect(() => {
-    fetch("/location/test")
+    fetch("/favourite/test")
       .then((res) => res.json())
       .then((text) => {
         for (let index = 0; index < text.length; index++) {
