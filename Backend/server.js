@@ -52,7 +52,7 @@ db.once('open', function() {
   // TO DO - Urgent: 
   // Seperate View for Each Locations (Frontend)
   // Admin CRUD Page for Users and Locations (Frontend)
-  // index.html now showing what????? (Frontend)
+  // index.html not showing what????? (Frontend)
   // Sorting based locName, locLong, locLat (Frontend)
   // Favourite Location View, and Add Favourite Button
   // Show username and Login/Logout (Jimmy - Session / Backend?)
