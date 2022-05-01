@@ -2,7 +2,7 @@
 // const {useMatch, useParams, useLocation} = ReactRouterDOM;
 import ReactDOM from "react-dom";
 import "./App.css";
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import {
   BrowserRouter,
@@ -12,6 +12,7 @@ import {
   useMatch,
   useParams,
   useLocation,
+  useNavigate
 } from "react-router-dom";
 
 function App() {
@@ -54,10 +55,10 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/favloc" element={<FavLoc />} />
             <Route path="/createaccount" element={<CreateAccount />} />
-            <Route path="/location" element={<Location_details />} />
+            <Route path="/location/:loc" element={<Location_details />} />
             <Route path="*" element={<NoMatch />} />
           </Routes>
-          <p>{!data ? "Lodaing..." : data}</p>
+          {/*<p>{!data ? "Loading..." : data}</p>*/}
         </div>
       </BrowserRouter>
     </>
@@ -90,29 +91,100 @@ function NoMatch() {
   );
 }
 
-class Location_details extends React.Component {
-  render() {
-    return (
-      <div class="container mt-3">
-        <h2>Location</h2>
-        <div class="gmap_canvas">
-          {/*----------Use this link to generate the src https://google-map-generator.com/ ---------- */}
-          <iframe
-            width="100%"
-            height="300"
-            id="gmap_canvas"
-            src={
-              "https://maps.google.com/maps?q=2880%20Broadway,%20New%20York&t=&z=13&ie=UTF8&iwloc=&output=embed"
-            }
-            frameborder="0"
-            scrolling="no"
-            marginheight="0"
-            marginwidth="0"
-          ></iframe>
-        </div>
+function Location_details() {
+  const [details, setDetails] = useState({
+    Name: null,
+    Latitude: null,
+    Longitude: null,
+    Temperature: null,
+    Wind_speed: null,
+    Wind_direction: null,
+    Humidity: null,
+    Precipitation: null,
+    Visibility: null
+    /*num: -1,
+    locName: "",
+    locLat: -1,
+    locLong: -1,*/
+  });
+
+  let loc = useParams().loc;
+
+  const fetchDetails = () => {
+    /*fetch("/location")
+    .then((res) => res.json())
+    .then((text) => {
+      for (let index = 0; index < text.length; index++) {
+        if( text[index].locName == loc){
+          setDetails({
+            num: index + 1,
+            locName: text[index].locName,
+            locLat: text[index].locLat,
+            locLong: text[index].locLong
+          });
+        }
+      }
+    });*/
+    let link = "/location/" + loc;
+    console.log(link);
+    fetch(link)
+    .then((res) => res.json())
+    .then((text) => {
+          setDetails({
+            Name: text.Name,
+            Latitude: text.Latitude,
+            Longitude: text.Longitude,
+            Temperature: text.Temperature,
+            Wind_speed: text.Wind_speed,
+            Wind_direction: text.Wind_direction,
+            Humidity: text.Humidity,
+            Precipitation: text.Precipitation,
+            Visibility: text.Visibility
+          });
+    });
+  };
+
+  React.useEffect(()=>{
+    fetchDetails();
+  },[]);
+
+  console.log(details);
+  return (
+    <div class="container mt-3">
+      <p class="mb-0"><br/></p>
+      <h1>{details.Name}</h1>
+      <p>
+          {Math.abs(details.Latitude)}°
+          {details.Latitude > 0 ? "N" : "S"}{" "}
+          {Math.abs(details.Longitude)}°
+          {details.Longitude > 0 ? "E" : "W"}
+      </p>
+      <div class="gmap_canvas">
+        {/*----------Use this link to generate the src https://google-map-generator.com/ ---------- */}
+        <iframe
+          width="100%"
+          height="300"
+          id="gmap_canvas"
+          src={
+            "https://maps.google.com/maps?q="+ details.Name +"&t=k&z=11&ie=UTF8&iwloc=&output=embed"
+          }
+          frameborder="0"
+          scrolling="no"
+          marginheight="0"
+          marginwidth="0"
+        ></iframe>
+        <h1><br/>
+          {details.Temperature}°C
+        </h1>
+        <p>
+          Wind speed: {details.Wind_speed}kph {details.Wind_direction}<br/>
+          Humidity: {details.Humidity}%<br/>
+          Precipitation: {details.Precipitation}mm<br/>
+          Visibillity: {details.Visibility}km<br/>
+        </p>
       </div>
-    );
-  }
+    </div>
+  );
 }
 
 class NavList extends React.Component {
@@ -275,6 +347,11 @@ class Home extends React.Component {
   /*-----Todo: table for both favloc and home */
 }
 function Table() {
+  //for redirect to seperate view to each location
+  const navigate = useNavigate();
+  const handleRowClick = (link) => {
+    navigate(link);
+  }  
   // a stub for creating location info (todo: get location info from database)
   //   const data =[{num: 1 , locName: "New York", locLat: 40.712, locLong: -74.0059},
   //   {num: 2 , locName: "Hong Kong", locLat: 22.302, locLong: 114.177},
@@ -296,8 +373,9 @@ function Table() {
       });
   }, []);
 
+  //please put link in handleRowClick
   var listItems = data.map((data) => (
-    <tr>
+    <tr onClick={()=> handleRowClick('/location/'+ data.locName)}>
       <th scope="row">{data.num}</th>
       <td>{data.locName}</td>
       <td>{data.locLat}</td>
@@ -316,7 +394,7 @@ function Table() {
             <th scope="col">Longitude</th>
           </tr>
         </thead>
-        <tbody>{!listItems ? "Lodaing..." : listItems}</tbody>
+        <tbody>{!listItems ? "Loading..." : listItems}</tbody>
       </table>
     </>
   );
