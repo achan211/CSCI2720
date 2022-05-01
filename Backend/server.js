@@ -50,10 +50,9 @@ db.once('open', function() {
   })
 
   // TO DO - Urgent: 
-  // Search for Location (Backend), 
   // Seperate View for Each Locations (Frontend)
   // Admin CRUD Page for Users and Locations (Frontend)
-  // index.html now showing what????? (Frontend)
+  // index.html not showing what????? (Frontend)
   // Sorting based locName, locLong, locLat (Frontend)
   // Favourite Location View, and Add Favourite Button
   // Show username and Login/Logout (Jimmy - Session / Backend?)
@@ -65,6 +64,14 @@ db.once('open', function() {
   // Project Documentations (ALL)
   // Include full names and student IDs of all members in all code files using comments. (ALL)
 
+
+  // Search for Location - DONE!
+  app.get('/loc', (req, res) => { // query in the form /loc?keyword=Hong-Kong
+    var keyword = req.query['keyword'];
+    // res.send(keyword)
+    Location.find({locName: {$regex: keyword}}, '-_id locName locLat locLong').exec()
+    .then(r => {res.send(r)})
+  })
 
   // Login - DONE!
 
@@ -183,7 +190,7 @@ db.once('open', function() {
   // View User Favourite Array - DONE!
   app.get('/favourite/:username', (req, res) => {
     User.findOne({username: req.params['username']}, '-_id favourite')
-    .populate('favourite', '-_id locName')
+    .populate('favourite', '-_id locName locLat locLong')
     .exec()
     .then(fav => {
       res.send(JSON.stringify(fav.favourite))
