@@ -70,13 +70,7 @@ db.once('open', function() {
     var keyword = req.query['keyword'];
     // res.send(keyword)
     Location.find({locName: {$regex: keyword}}, '-_id locName locLat locLong').exec()
-    .then(r => {
-      if (r.length != 0) {
-        res.send(r)
-      } else {
-        res.send("No Match. ")
-      }
-    })
+    .then(r => {res.send(r)})
   })
 
   // Login - DONE!

@@ -2,7 +2,7 @@
 // const {useMatch, useParams, useLocation} = ReactRouterDOM;
 import ReactDOM from "react-dom";
 import "./App.css";
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import {
   BrowserRouter,
@@ -200,51 +200,47 @@ class Logout extends React.Component {
   }
 }
 
-class Home extends React.Component {
-  render() {
-    return (
-      <>
-        <div class="container">
-          <br />
-          <h2>Location</h2>
-          <div class="row">
-            <div class="col-7">
-              <div class="row">
-                <div class="col-6">
-                  <form class="d-flex">
-                    {/*----------!!!!!to do: search for loc---------- */}
-                    <input
-                      class="form-control me-2"
-                      type="search"
-                      placeholder="Search for location"
-                      aria-label="Search"
-                    />
-                    <button class="btn btn-dark" type="submit">
-                      <span class="material-icons">&#xE8B6;</span>
-                    </button>
-                  </form>
-                </div>
-                <p class="col-2 mb-0 mt-2 p-0 text-end">Sort By:</p>
+function Home() {
+  const [data, setData] = useState([]);
+  const [q, setQ] = useState("");
 
-                <div class="col-4">
-                  <form class="d-flex">
-                    {/*----------!!!!!To do: sorting using dropdown list---------- */}
-                    <select
-                      class="form-select"
-                      aria-label="Default select example"
-                    >
-                      <option value="opt0" selected>
-                        Name
-                      </option>
-                      <option value="opt1">District</option>
-                      <option value="opt2">East to West</option>
-                      <option value="opt3">North to south</option>
-                    </select>
-                  </form>
-                </div>
-              </div>
-              <Table />
-              {/*----------!!!!!todo: loc data tranfer by props??---------- */}
+  useEffect(() => {
+    fetch("/location")
+    .then(r => r.json())
+    .then(data => setData(data));
+  }, []);
+
+  function search(rows) {
+    return rows.filter(row => row.locName.indexOf(q) > -1); // Need fix allow both Upper and Lower Case
+  }
+
+  return (
+    <>
+    <div class="container"><br />
+    <h2>Location</h2>
+    <div class="row">
+      <div class="col-7">
+      <div class="row">
+      <div class="col-6">
+      <form class="d-flex">
+        <input class="form-control me-2" type="text" placeholder="Search for location" aria-label="Search" value={q} onChange={(e) => setQ(e.target.value)} />
+      </form>
+      </div>
+      <p class="col-2 mb-0 mt-2 p-0 text-end">Sort By:</p>
+      <div class="col-4">
+        <form class="d-flex">
+        {/*----------!!!!!To do: sorting using dropdown list---------- */}
+        <select class="form-select" aria-label="Default select example">
+          <option value="opt0" selected>Name</option>
+          <option value="opt1">District</option>
+          <option value="opt2">East to West</option>
+          <option value="opt3">North to south</option>
+         </select>
+         </form>
+         </div>
+        </div>
+        <Datatable data={search(data)} />
+        {/*----------!!!!!todo: loc data tranfer by props??---------- */}
             </div>
             <div class="col-5">
               <div class="mapouter">
@@ -268,12 +264,33 @@ class Home extends React.Component {
           </div>
         </div>
       </>
-    );
-  }
+  )
 }
-{
-  /*-----Todo: table for both favloc and home */
+
+function Datatable({ data }) {
+  const columns = data[0] && Object.keys(data[0])
+  return (
+    <>
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th scope="col">Location</th>
+          <th scope="col">Latitude</th>
+          <th scope="col">Longitude</th>
+        </tr>
+      </thead>
+      <tbody>
+        {data.map(row => <tr>
+          {
+          columns.map(column => <td>{row[column]}</td>)
+          }
+        </tr>)}
+      </tbody>
+    </table>
+    </>
+  )
 }
+
 function Table() {
   // a stub for creating location info (todo: get location info from database)
   //   const data =[{num: 1 , locName: "New York", locLat: 40.712, locLong: -74.0059},
@@ -281,7 +298,7 @@ function Table() {
   //   {num: 3 , locName: "London", locLat: 51.507, locLong: -0.127}];
   const [data, setData] = useState([]);
   React.useEffect(() => {
-    fetch("/location")
+    fetch("/location/test")
       .then((res) => res.json())
       .then((text) => {
         for (let index = 0; index < text.length; index++) {
