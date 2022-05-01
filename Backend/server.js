@@ -50,7 +50,6 @@ db.once('open', function() {
   })
 
   // TO DO - Urgent: 
-  // Search for Location (Backend), 
   // Seperate View for Each Locations (Frontend)
   // Admin CRUD Page for Users and Locations (Frontend)
   // index.html now showing what????? (Frontend)
@@ -65,6 +64,20 @@ db.once('open', function() {
   // Project Documentations (ALL)
   // Include full names and student IDs of all members in all code files using comments. (ALL)
 
+
+  // Search for Location - DONE!
+  app.get('/loc', (req, res) => { // query in the form /loc?keyword=Hong-Kong
+    var keyword = req.query['keyword'];
+    // res.send(keyword)
+    Location.find({locName: {$regex: keyword}}, '-_id locName locLat locLong').exec()
+    .then(r => {
+      if (r.length != 0) {
+        res.send(r)
+      } else {
+        res.send("No Match. ")
+      }
+    })
+  })
 
   // Login - DONE!
 
