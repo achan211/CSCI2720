@@ -404,7 +404,7 @@ function Location_details() {
           marginheight="0"
           marginwidth="0"
         ></iframe>
-        <h2>Current Temperature {details.Temperature}°C</h2>
+        <h2>Current Temperature: {details.Temperature}°C</h2>
         <p>
           Wind speed: {details.Wind_speed}kph {details.Wind_direction}
           <br />
@@ -415,12 +415,15 @@ function Location_details() {
           <br />
         </p>
         <h3>Users' Comments: </h3>
-        <div>{!listItems ? "Loading..." : listItems}</div>
-        <h3>Your Comment</h3>
-        <textarea
-          className="form-control form-control-lg mb-3"
-          placeholder="Write your comments here."
-        ></textarea>
+        <div>{listItems.length === 0 ? "No Comments for this Location." : listItems}</div>
+        <h3>Your Comment:</h3>
+        <form>
+          <textarea
+            className="form-control form-control-lg mb-3"
+            placeholder="Write your comments here."
+          ></textarea>
+          <button type="submit" className="btn btn-secondary">Submit</button>
+        </form>
       </div>
     </div>
   );
