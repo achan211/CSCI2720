@@ -303,7 +303,7 @@ function Home() {
     .then(data => setData(data));
   }, []);
 
-  function search(rows) { // Need fix allow both Upper and Lower Case
+  function search(rows) {
     let filterRows = rows.filter(row => row.locName.search(new RegExp(q,"i")) > -1);
     let sortRows 
     if (s === "locName") {
@@ -331,7 +331,6 @@ function Home() {
       <p class="col-2 mb-0 mt-2 p-0 text-end">Sort By:</p>
       <div class="col-4">
         <form class="d-flex">
-        {/*----------!!!!!To do: sorting using dropdown list---------- */}
         <select class="form-select" aria-label="Default select example" onChange={e => {
           setS(e.target.value);
         }}>
