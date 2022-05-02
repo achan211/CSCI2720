@@ -12,7 +12,7 @@ import {
   useMatch,
   useParams,
   useLocation,
-  useNavigate
+  useNavigate,
 } from "react-router-dom";
 
 function App() {
@@ -92,17 +92,17 @@ function NoMatch() {
   );
 }
 
-function Admin_page(){
+function Admin_page() {
   const [locData, setlocData] = useState([]);
   const [userData, setuserData] = useState([]);
   useEffect(() => {
     fetch("/location")
-    .then(r => r.json())
-    .then(data => setlocData(data));
+      .then((r) => r.json())
+      .then((data) => setlocData(data));
 
-    fetch("/user")//haven't create any user yet so have error
-    .then(r => r.json())
-    .then(data => setuserData(data));
+    fetch("/user") //haven't create any user yet so have error
+      .then((r) => r.json())
+      .then((data) => setuserData(data));
   }, []);
 
   const CRUDLocation = (action) => {
@@ -113,13 +113,13 @@ function Admin_page(){
     //todo
   };
 
-  const columns = userData[0] && Object.keys(userData[0])
+  const columns = userData[0] && Object.keys(userData[0]);
 
-  return(    
+  return (
     <div class="container mt-3">
-      <br/>
+      <br />
       <h1>Admin Page</h1>
-      <br/>
+      <br />
       <div class="row">
         <div class="col">
           <h2>Users</h2>
@@ -133,94 +133,185 @@ function Admin_page(){
               </tr>
             </thead>
             <tbody>
-              {userData.map(row => <tr>
-                {
-                columns.map(column => <td>{row[column]}</td>)
-                }
-              </tr>)}
+              {userData.map((row) => (
+                <tr>
+                  {columns.map((column) => (
+                    <td>{row[column]}</td>
+                  ))}
+                </tr>
+              ))}
             </tbody>
           </table>
-          
-          <br/>
+
+          <br />
           <h2>CRUD Users</h2>
           <form>
             <div class="mb-3">
-            <label for="username" class="form-label">Username</label>
-              <input type="text" class="form-control" id="username"/>
+              <label for="username" class="form-label">
+                Username
+              </label>
+              <input type="text" class="form-control" id="username" />
             </div>
             <div class="mb-3">
-              <label for="Password" class="form-label">Password</label>
-              <input type="password" class="form-control" id="Password" aria-describedby="passwordhelp"/>
-              <div id="passwordhelp" class="form-text">Leave blank if delete or retrive user.</div>
+              <label for="Password" class="form-label">
+                Password
+              </label>
+              <input
+                type="password"
+                class="form-control"
+                id="Password"
+                aria-describedby="passwordhelp"
+              />
+              <div id="passwordhelp" class="form-text">
+                Leave blank if delete or retrive user.
+              </div>
             </div>
             <div class="mb-3 form-check">
-              <input type="checkbox" class="form-check-input" id="Check"/>
-              <label class="form-check-label" for="Check">Admin?</label>
+              <input type="checkbox" class="form-check-input" id="Check" />
+              <label class="form-check-label" for="Check">
+                Admin?
+              </label>
             </div>
             <div class="row gx-2">
               <div class="col">
-                <button type="submit" class="btn btn-success" onClick={() => CRUDUser("Create")}>Create</button>
-              </div><div class="col">
-                <button type="submit" class="btn btn-primary" onClick={() => CRUDUser("Retrive")}>Retrive</button>
-              </div><div class="col">
-                <button type="submit" class="btn btn-primary" onClick={() => CRUDUser("Update")}>Update</button>
-              </div><div class="col">
-                <button type="submit" class="btn btn-danger" onClick={() => CRUDUser("Delete")}>Delete</button>
+                <button
+                  type="submit"
+                  class="btn btn-success"
+                  onClick={() => CRUDUser("Create")}
+                >
+                  Create
+                </button>
+              </div>
+              <div class="col">
+                <button
+                  type="submit"
+                  class="btn btn-primary"
+                  onClick={() => CRUDUser("Retrive")}
+                >
+                  Retrive
+                </button>
+              </div>
+              <div class="col">
+                <button
+                  type="submit"
+                  class="btn btn-primary"
+                  onClick={() => CRUDUser("Update")}
+                >
+                  Update
+                </button>
+              </div>
+              <div class="col">
+                <button
+                  type="submit"
+                  class="btn btn-danger"
+                  onClick={() => CRUDUser("Delete")}
+                >
+                  Delete
+                </button>
               </div>
             </div>
           </form>
-          
-          <br/>
-          <div id="retrived_user_data">
-                Retrived user data goes here
-          </div>           
+
+          <br />
+          <div id="retrived_user_data">Retrived user data goes here</div>
         </div>
-        
+
         <div class="col">
           <h2>Locations</h2>
           <Datatable fData={locData} />
 
-          <br/>
+          <br />
           <h2>CRUD Locations</h2>
-          <br/>
+          <br />
           <form>
             <div class="mb-3">
-            <label for="locname" class="form-label">Location</label>
-              <input type="text" class="form-control" id="locname" aria-describedby="emailHelp"/>
+              <label for="locname" class="form-label">
+                Location
+              </label>
+              <input
+                type="text"
+                class="form-control"
+                id="locname"
+                aria-describedby="emailHelp"
+              />
             </div>
             <div class="mb-3">
-              <label for="locLat" class="form-label">Latitude</label>
-              <input type="number" class="form-control" id="locLac" aria-describedby="locLachelp"/>
-              <div id="locLachelp" class="form-text">Leave blank if delete or retrive location.</div>
+              <label for="locLat" class="form-label">
+                Latitude
+              </label>
+              <input
+                type="number"
+                class="form-control"
+                id="locLac"
+                aria-describedby="locLachelp"
+              />
+              <div id="locLachelp" class="form-text">
+                Leave blank if delete or retrive location.
+              </div>
             </div>
             <div class="mb-3">
-              <label for="locLong" class="form-label">Longtitude</label>
-              <input type="number" class="form-control" id="locLong" aria-describedby="locLonghelp"/>
-              <div id="locLonghelp" class="form-text">Leave blank if delete or retrive location.</div>
+              <label for="locLong" class="form-label">
+                Longtitude
+              </label>
+              <input
+                type="number"
+                class="form-control"
+                id="locLong"
+                aria-describedby="locLonghelp"
+              />
+              <div id="locLonghelp" class="form-text">
+                Leave blank if delete or retrive location.
+              </div>
             </div>
             <div class="row gx-2">
               <div class="col">
-                <button type="submit" class="btn btn-success" onClick={() => CRUDLocation("Create")}>Create</button>
-              </div><div class="col">
-                <button type="submit" class="btn btn-primary" onClick={() => CRUDLocation("Retrive")}>Retrive</button>
-              </div><div class="col">
-                <button type="submit" class="btn btn-primary" onClick={() => CRUDLocation("Update")}>Update</button>
-              </div><div class="col">
-                <button type="submit" class="btn btn-danger" onClick={() => CRUDLocation("Delete")}>Delete</button>
+                <button
+                  type="submit"
+                  class="btn btn-success"
+                  onClick={() => CRUDLocation("Create")}
+                >
+                  Create
+                </button>
+              </div>
+              <div class="col">
+                <button
+                  type="submit"
+                  class="btn btn-primary"
+                  onClick={() => CRUDLocation("Retrive")}
+                >
+                  Retrive
+                </button>
+              </div>
+              <div class="col">
+                <button
+                  type="submit"
+                  class="btn btn-primary"
+                  onClick={() => CRUDLocation("Update")}
+                >
+                  Update
+                </button>
+              </div>
+              <div class="col">
+                <button
+                  type="submit"
+                  class="btn btn-danger"
+                  onClick={() => CRUDLocation("Delete")}
+                >
+                  Delete
+                </button>
               </div>
             </div>
           </form>
-          <br/>
-          <div id="retrived_loc_data">
-                Retrived location data goes here
-          </div> 
+          <br />
+          <div id="retrived_loc_data">Retrived location data goes here</div>
         </div>
       </div>
-    </div>);
+    </div>
+  );
 }
 
 function Location_details() {
-  let [c, setC] = useState([])
+  const [c, setC] = useState([]);
   const [details, setDetails] = useState({
     Name: null,
     Latitude: null,
@@ -230,7 +321,7 @@ function Location_details() {
     Wind_direction: null,
     Humidity: null,
     Precipitation: null,
-    Visibility: null
+    Visibility: null,
     /*num: -1,
     locName: "",
     locLat: -1,
@@ -243,47 +334,59 @@ function Location_details() {
     let link = "/location/" + loc;
     console.log(link);
     fetch(link)
-    .then((res) => res.json())
-    .then((text) => {
-          setDetails({
-            Name: text.Name,
-            Latitude: text.Latitude,
-            Longitude: text.Longitude,
-            Temperature: text.Temperature,
-            Wind_speed: text.Wind_speed,
-            Wind_direction: text.Wind_direction,
-            Humidity: text.Humidity,
-            Precipitation: text.Precipitation,
-            Visibility: text.Visibility
-          });
-    });
+      .then((res) => res.json())
+      .then((text) => {
+        setDetails({
+          Name: text.Name,
+          Latitude: text.Latitude,
+          Longitude: text.Longitude,
+          Temperature: text.Temperature,
+          Wind_speed: text.Wind_speed,
+          Wind_direction: text.Wind_direction,
+          Humidity: text.Humidity,
+          Precipitation: text.Precipitation,
+          Visibility: text.Visibility,
+        });
+      });
   };
 
   const fetchComments = () => {
-    let link = "http://localhost:4000/comment/" + loc
+    let link = "http://localhost:4000/comment/" + loc;
     fetch(link)
-    .then(r => r.json())
-    .then(data => {
-      console.log(data)
-      setC(data);
-    })
-  }
- 
-  React.useEffect(()=>{
+      .then((r) => r.json())
+      .then((data) => {
+        for (let index = 0; index < data.length; index++) {
+          var d = {
+            username: data[index].user.username,
+            comment: data[index].comment,
+          };
+          console.log(d);
+          setC((olddata) => [...olddata, d]);
+        }
+      });
+  };
+
+  React.useEffect(() => {
     fetchDetails();
     fetchComments();
-  },[]);
+  }, []);
 
-  console.log(details);
+  // console.log(details);
+  var listItems = c.map((row) => (
+    <div>
+      <h5>{row.username}</h5>
+      <p>{row.comment}</p>
+    </div>
+  ));
   return (
     <div class="container mt-3 mb-3">
-      <p class="mb-0"><br/></p>
+      <p class="mb-0">
+        <br />
+      </p>
       <h1>{details.Name}</h1>
       <p>
-          {Math.abs(details.Latitude)}°
-          {details.Latitude > 0 ? "N" : "S"}{" "}
-          {Math.abs(details.Longitude)}°
-          {details.Longitude > 0 ? "E" : "W"}
+        {Math.abs(details.Latitude)}°{details.Latitude > 0 ? "N" : "S"}{" "}
+        {Math.abs(details.Longitude)}°{details.Longitude > 0 ? "E" : "W"}
       </p>
       <div class="gmap_canvas">
         {/*----------Use this link to generate the src https://google-map-generator.com/ ---------- */}
@@ -292,31 +395,32 @@ function Location_details() {
           height="400"
           id="gmap_canvas"
           src={
-            "https://maps.google.com/maps?q="+ details.Name +"&t=k&z=11&ie=UTF8&iwloc=&output=embed"
+            "https://maps.google.com/maps?q=" +
+            details.Name +
+            "&t=k&z=11&ie=UTF8&iwloc=&output=embed"
           }
           frameborder="0"
           scrolling="no"
           marginheight="0"
           marginwidth="0"
         ></iframe>
-        <h2>
-          Current Temperature {details.Temperature}°C
-        </h2>
+        <h2>Current Temperature {details.Temperature}°C</h2>
         <p>
-          Wind speed: {details.Wind_speed}kph {details.Wind_direction}<br/>
-          Humidity: {details.Humidity}%<br/>
-          Precipitation: {details.Precipitation}mm<br/>
-          Visibillity: {details.Visibility}km<br/>
+          Wind speed: {details.Wind_speed}kph {details.Wind_direction}
+          <br />
+          Humidity: {details.Humidity}%<br />
+          Precipitation: {details.Precipitation}mm
+          <br />
+          Visibillity: {details.Visibility}km
+          <br />
         </p>
         <h3>Users' Comments: </h3>
-        <div>{c.length === 0 ? "No Comments for this Location." : c.map(row => { // mapping does not work...
-          <>
-          <h5>{row.user.username}</h5><br />
-          <p>{row.comment}</p>
-          </>
-        })}</div>
+        <div>{!listItems ? "Loading..." : listItems}</div>
         <h3>Your Comment</h3>
-        <textarea className="form-control form-control-lg mb-3" placeholder="Write your comments here."></textarea>
+        <textarea
+          className="form-control form-control-lg mb-3"
+          placeholder="Write your comments here."
+        ></textarea>
       </div>
     </div>
   );
@@ -420,103 +524,135 @@ function Home() {
 
   useEffect(() => {
     fetch("/location")
-    .then(r => r.json())
-    .then(data => setData(data));
+      .then((r) => r.json())
+      .then((data) => setData(data));
   }, []);
 
   function search(rows) {
-    let filterRows = rows.filter(row => row.locName.search(new RegExp(q,"i")) > -1);
-    let sortRows 
+    let filterRows = rows.filter(
+      (row) => row.locName.search(new RegExp(q, "i")) > -1
+    );
+    let sortRows;
     if (s === "locName") {
-      sortRows = filterRows.sort((a, b) => a.locName === b.locName ? 0 : a.locName > b.locName? 1 : -1);
+      sortRows = filterRows.sort((a, b) =>
+        a.locName === b.locName ? 0 : a.locName > b.locName ? 1 : -1
+      );
     } else if (s === "locLat") {
-      sortRows = filterRows.sort((a, b) => parseFloat(a.locLat) === parseFloat(b.locLat) ? 0 : parseFloat(a.locLat) > parseFloat(b.locLat) ? 1 : -1);
+      sortRows = filterRows.sort((a, b) =>
+        parseFloat(a.locLat) === parseFloat(b.locLat)
+          ? 0
+          : parseFloat(a.locLat) > parseFloat(b.locLat)
+          ? 1
+          : -1
+      );
     } else {
-      sortRows = filterRows.sort((a, b) => parseFloat(a.locLong) === parseFloat(b.locLong) ? 0 : parseFloat(a.locLong) > parseFloat(b.locLong) ? 1 : -1);
+      sortRows = filterRows.sort((a, b) =>
+        parseFloat(a.locLong) === parseFloat(b.locLong)
+          ? 0
+          : parseFloat(a.locLong) > parseFloat(b.locLong)
+          ? 1
+          : -1
+      );
     }
     return sortRows;
   }
 
   return (
     <>
-    <div class="container"><br />
-    <h2>Location</h2>
-    <div class="row">
-      <div class="col-7">
-      <div class="row">
-      <div class="col-6">
-      <form class="d-flex">
-        <input class="form-control me-2" type="text" placeholder="Search for location" aria-label="Search" value={q} onChange={(e) => setQ(e.target.value)} />
-      </form>
-      </div>
-      <p class="col-2 mb-0 mt-2 p-0 text-end">Sort By:</p>
-      <div class="col-4">
-        <form class="d-flex">
-        <select class="form-select" aria-label="Default select example" onChange={e => {
-          setS(e.target.value);
-        }}>
-          <option value="locName" selected>Location Name</option>
-          <option value="locLat">Latitude</option>
-          <option value="locLong">Longitude</option>
-         </select>
-         </form>
-         </div>
-        </div>
-        <Datatable fData={search(data)} />
-        {/*----------!!!!!todo: loc data tranfer by props??---------- */}
+      <div class="container">
+        <br />
+        <h2>Location</h2>
+        <div class="row">
+          <div class="col-7">
+            <div class="row">
+              <div class="col-6">
+                <form class="d-flex">
+                  <input
+                    class="form-control me-2"
+                    type="text"
+                    placeholder="Search for location"
+                    aria-label="Search"
+                    value={q}
+                    onChange={(e) => setQ(e.target.value)}
+                  />
+                </form>
+              </div>
+              <p class="col-2 mb-0 mt-2 p-0 text-end">Sort By:</p>
+              <div class="col-4">
+                <form class="d-flex">
+                  <select
+                    class="form-select"
+                    aria-label="Default select example"
+                    onChange={(e) => {
+                      setS(e.target.value);
+                    }}
+                  >
+                    <option value="locName" selected>
+                      Location Name
+                    </option>
+                    <option value="locLat">Latitude</option>
+                    <option value="locLong">Longitude</option>
+                  </select>
+                </form>
+              </div>
             </div>
-            <div class="col-5">
-              <div class="mapouter">
-                <div class="gmap_canvas">
-                  {/*----------Use this link to generate the src https://google-map-generator.com/ ---------- */}
-                  <iframe
-                    width="300"
-                    height="300"
-                    id="gmap_canvas"
-                    src={
-                      "https://maps.google.com/maps?q=2880%20Broadway,%20New%20York&t=&z=13&ie=UTF8&iwloc=&output=embed"
-                    }
-                    frameborder="0"
-                    scrolling="no"
-                    marginheight="0"
-                    marginwidth="0"
-                  ></iframe>
-                </div>
+            <Datatable fData={search(data)} />
+            {/*----------!!!!!todo: loc data tranfer by props??---------- */}
+          </div>
+          <div class="col-5">
+            <div class="mapouter">
+              <div class="gmap_canvas">
+                {/*----------Use this link to generate the src https://google-map-generator.com/ ---------- */}
+                <iframe
+                  width="300"
+                  height="300"
+                  id="gmap_canvas"
+                  src={
+                    "https://maps.google.com/maps?q=2880%20Broadway,%20New%20York&t=&z=13&ie=UTF8&iwloc=&output=embed"
+                  }
+                  frameborder="0"
+                  scrolling="no"
+                  marginheight="0"
+                  marginwidth="0"
+                ></iframe>
               </div>
             </div>
           </div>
         </div>
-      </>
-  )
+      </div>
+    </>
+  );
 }
 
 function Datatable({ fData }) {
-  const columns = fData[0] && Object.keys(fData[0])
+  const columns = fData[0] && Object.keys(fData[0]);
   const navigate = useNavigate();
   const handleRowClick = (link) => {
     navigate(link);
-  }  
-  
+  };
+
   return (
     <>
-    <table class="table table-hover">
-      <thead>
-        <tr>
-          <th scope="col">Location Name</th>
-          <th scope="col">Latitude</th>
-          <th scope="col">Longitude</th>
-        </tr>
-      </thead>
-      <tbody>
-        {fData.map(row => <tr onClick={()=> handleRowClick("/location/" + row.locName)}>
-          {
-          columns.map(column => <td>{row[column]}</td>)
-          }
-        </tr>)}
-      </tbody>
-    </table>
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th scope="col">Location Name</th>
+            <th scope="col">Latitude</th>
+            <th scope="col">Longitude</th>
+          </tr>
+        </thead>
+        <tbody>
+          {fData.map((row) => (
+            <tr onClick={() => handleRowClick("/location/" + row.locName)}>
+              {columns.map((column) => (
+                <td>{row[column]}</td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </>
-  )
+  );
 }
 
 function Table() {
@@ -524,7 +660,7 @@ function Table() {
   const navigate = useNavigate();
   const handleRowClick = (link) => {
     navigate(link);
-  }  
+  };
   // a stub for creating location info (todo: get location info from database)
   //   const data =[{num: 1 , locName: "New York", locLat: 40.712, locLong: -74.0059},
   //   {num: 2 , locName: "Hong Kong", locLat: 22.302, locLong: 114.177},
@@ -548,7 +684,7 @@ function Table() {
 
   //please put link in handleRowClick
   var listItems = data.map((data) => (
-    <tr onClick={()=> handleRowClick('/location/'+ data.locName)}>
+    <tr onClick={() => handleRowClick("/location/" + data.locName)}>
       <th scope="row">{data.num}</th>
       <td>{data.locName}</td>
       <td>{data.locLat}</td>
