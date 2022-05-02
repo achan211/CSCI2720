@@ -415,7 +415,7 @@ function Location_details() {
           <br />
         </p>
         <h3>Users' Comments: </h3>
-        <div>{!listItems ? "Loading..." : listItems}</div>
+        <div>{listItems.length===0 ? "No comment" : listItems}</div>
         <h3>Your Comment</h3>
         <textarea
           className="form-control form-control-lg mb-3"
