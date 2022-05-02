@@ -333,8 +333,7 @@ db.once("open", function () {
   // use form submit to pass the searching location
   app.post("/searchLoc", (req, res) => {
     var search = req.body["search"];
-    var str = "^" + search + "*";
-    var query = Location.find({ locName: { $regex: str } });
+    var query = Location.find({ locName: { $regex: new RegExp(search,"i") } });
     query.select("-_id locName locLat locLong");
     query.exec().then(
       (results) => {
