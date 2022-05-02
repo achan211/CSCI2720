@@ -27,7 +27,7 @@
         function loadComment(){
             document.querySelector("#commentSpace").innerHTML = ""
             let locName = document.querySelector('#locName').value;
-            fetch("http://localhost:4000/" + locName + "/comment")
+            fetch("http://localhost:4000/comment/" + locName)
             .then(res => res.json())
             .then(data => {
                 if (data.length != 0) {

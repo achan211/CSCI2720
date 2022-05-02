@@ -55,10 +55,7 @@ db.once("open", function () {
   });
 
   // TO DO - Urgent:
-  // Seperate View for Each Locations (Frontend)
   // Admin CRUD Page for Users and Locations (Frontend)
-  // index.html not showing what????? (Frontend)
-  // Sorting based locName, locLong, locLat (Frontend)
   // Favourite Location View, and Add Favourite Button
   // Show username and Login/Logout (Jimmy - Session / Backend?)
   // Admin have button at seperate Location views to refresh Location temperature data (Frontend for button, Backend for update data)
@@ -179,7 +176,7 @@ db.once("open", function () {
   });
 
   // See Comment based on Location - DONE!
-  app.get("/:locName/comment", (req, res) => {
+  app.get("/comment/:locName", (req, res) => {
     var loc_id;
     Location.findOne({ locName: req.params["locName"] }, "_id")
       .exec()
