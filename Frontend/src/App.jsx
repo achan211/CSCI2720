@@ -415,15 +415,13 @@ function Location_details() {
           <br />
         </p>
         <h3>Users' Comments: </h3>
-        <div>{listItems.length === 0 ? "No Comments for this Location." : listItems}</div>
-        <h3>Your Comment:</h3>
-        <form>
-          <textarea
-            className="form-control form-control-lg mb-3"
-            placeholder="Write your comments here."
-          ></textarea>
-          <button type="submit" className="btn btn-secondary">Submit</button>
-        </form>
+        <div>{listItems.length===0 ? "No Comments for this Location." : listItems}</div>
+        <h3>Your Comment</h3>
+        <textarea
+          className="form-control form-control-lg mb-3"
+          placeholder="Write your comments here."
+        ></textarea>
+        <button type="button" className="btn btn-secondary">Submit</button>
       </div>
     </div>
   );
