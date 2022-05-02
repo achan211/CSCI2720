@@ -304,7 +304,7 @@ function Home() {
   }, []);
 
   function search(rows) { // Need fix allow both Upper and Lower Case
-    let filterRows = rows.filter(row => row.locName.indexOf(q) > -1);
+    let filterRows = rows.filter(row => row.locName.search(new RegExp(q,"i")) > -1);
     let sortRows 
     if (s === "locName") {
       sortRows = filterRows.sort((a, b) => a.locName === b.locName ? 0 : a.locName > b.locName? 1 : -1);
@@ -315,11 +315,6 @@ function Home() {
     }
     return sortRows;
   }
-  
-  // shorter version of searching case insensitive
-  // function search(rows) {
-  //   return rows.filter(row => row.locName.search(new RegExp(q,"i")) > -1); // Need fix allow both Upper and Lower Case -- fixed
-  // }
 
   return (
     <>
