@@ -182,8 +182,6 @@ function Location_details() {
           Precipitation: {details.Precipitation}mm<br/>
           Visibillity: {details.Visibility}km<br/>
         </p>
-        <h2>User's Comments: </h2>
-        <div>Comment Section goes here!</div>
         <Comment loc={details.Name} />
       </div>
     </div>
@@ -198,17 +196,13 @@ function Comment(loc) { // Need fix fix why can't fetch comments
   useEffect(() => {
     fetch(link)
     .then(r => r.json())
-    .then(com => setComment(com));
+    .then(data => setComment(data));
   }, []);
-
-  function test(){
-    console.log("Pressed!");
-    console.log(com);
-  }
 
   return(
     <>
-    <p>Not sure why can't fetch comments. Need Fix</p>
+    <h2>User's Comments: </h2>
+    <div>Comment Section goes here!</div>
     </>
   )
 }
