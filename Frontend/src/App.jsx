@@ -315,6 +315,11 @@ function Home() {
     }
     return sortRows;
   }
+  
+  // shorter version of searching case insensitive
+  // function search(rows) {
+  //   return rows.filter(row => row.locName.search(new RegExp(q,"i")) > -1); // Need fix allow both Upper and Lower Case -- fixed
+  // }
 
   return (
     <>
