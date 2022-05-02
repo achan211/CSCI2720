@@ -1,7 +1,9 @@
-# CSCI2720 Project - Weathering with Me
+# CSCI2720 Project (21-22 T2) - Weathering with Me
+
+## Group Members
 
 ## Instructions
-To open this file, do the following steps: 
+To open this web app, do the following steps: 
 
 Step 1: Pull ALL files  
 Step 2: Go to frontend and backend respectively and execute `npm install` respectively (just in case)  
