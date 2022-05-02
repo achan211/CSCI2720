@@ -56,6 +56,7 @@ function App() {
             <Route path="/favloc" element={<FavLoc />} />
             <Route path="/createaccount" element={<CreateAccount />} />
             <Route path="/location/:loc" element={<Location_details />} />
+            <Route path="/admin" element={<Admin_page />} />
             <Route path="*" element={<NoMatch />} />
           </Routes>
           {/*<p>{!data ? "Loading..." : data}</p>*/}
@@ -89,6 +90,133 @@ function NoMatch() {
       </h3>
     </div>
   );
+}
+
+function Admin_page(){
+  const [locData, setlocData] = useState([]);
+  const [userData, setuserData] = useState([]);
+  useEffect(() => {
+    fetch("/location")
+    .then(r => r.json())
+    .then(data => setlocData(data));
+
+    fetch("/user")//haven't create any user yet so have error
+    .then(r => r.json())
+    .then(data => setuserData(data));
+  }, []);
+
+  const CRUDLocation = (action) => {
+    //todo
+  };
+
+  const CRUDUser = (action) => {
+    //todo
+  };
+
+  const columns = userData[0] && Object.keys(userData[0])
+
+  return(    
+    <div class="container mt-3">
+      <br/>
+      <h1>Admin Page</h1>
+      <br/>
+      <div class="row">
+        <div class="col">
+          <h2>Users</h2>
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th scope="col">Username</th>
+                <th scope="col">Password</th>
+                <th scope="col">Admin</th>
+                <th scope="col">Favourate</th>
+              </tr>
+            </thead>
+            <tbody>
+              {userData.map(row => <tr>
+                {
+                columns.map(column => <td>{row[column]}</td>)
+                }
+              </tr>)}
+            </tbody>
+          </table>
+          
+          <br/>
+          <h2>CRUD Users</h2>
+          <form>
+            <div class="mb-3">
+            <label for="username" class="form-label">Username</label>
+              <input type="text" class="form-control" id="username"/>
+            </div>
+            <div class="mb-3">
+              <label for="Password" class="form-label">Password</label>
+              <input type="password" class="form-control" id="Password" aria-describedby="passwordhelp"/>
+              <div id="passwordhelp" class="form-text">Leave blank if delete or retrive user.</div>
+            </div>
+            <div class="mb-3 form-check">
+              <input type="checkbox" class="form-check-input" id="Check"/>
+              <label class="form-check-label" for="Check">Admin?</label>
+            </div>
+            <div class="row gx-2">
+              <div class="col">
+                <button type="submit" class="btn btn-success" onClick={() => CRUDUser("Create")}>Create</button>
+              </div><div class="col">
+                <button type="submit" class="btn btn-primary" onClick={() => CRUDUser("Retrive")}>Retrive</button>
+              </div><div class="col">
+                <button type="submit" class="btn btn-primary" onClick={() => CRUDUser("Update")}>Update</button>
+              </div><div class="col">
+                <button type="submit" class="btn btn-danger" onClick={() => CRUDUser("Delete")}>Delete</button>
+              </div>
+            </div>
+          </form>
+          
+          <br/>
+          <div id="retrived_user_data">
+                Retrived user data goes here
+          </div>           
+        </div>
+        
+        <div class="col">
+          <h2>Locations</h2>
+          <Datatable fData={locData} />
+
+          <br/>
+          <h2>CRUD Locations</h2>
+          <br/>
+          <form>
+            <div class="mb-3">
+            <label for="locname" class="form-label">Location</label>
+              <input type="text" class="form-control" id="locname" aria-describedby="emailHelp"/>
+            </div>
+            <div class="mb-3">
+              <label for="locLat" class="form-label">Latitude</label>
+              <input type="number" class="form-control" id="locLac" aria-describedby="locLachelp"/>
+              <div id="locLachelp" class="form-text">Leave blank if delete or retrive location.</div>
+            </div>
+            <div class="mb-3">
+              <label for="locLong" class="form-label">Longtitude</label>
+              <input type="number" class="form-control" id="locLong" aria-describedby="locLonghelp"/>
+              <div id="locLonghelp" class="form-text">Leave blank if delete or retrive location.</div>
+            </div>
+            <div class="row gx-2">
+              <div class="col">
+                <button type="submit" class="btn btn-success" onClick={() => CRUDLocation("Create")}>Create</button>
+              </div><div class="col">
+                <button type="submit" class="btn btn-primary" onClick={() => CRUDLocation("Retrive")}>Retrive</button>
+              </div><div class="col">
+                <button type="submit" class="btn btn-primary" onClick={() => CRUDLocation("Update")}>Update</button>
+              </div><div class="col">
+                <button type="submit" class="btn btn-danger" onClick={() => CRUDLocation("Delete")}>Delete</button>
+              </div>
+            </div>
+          </form>
+          <br/>
+          <div id="retrived_loc_data">
+                Retrived location data goes here
+          </div> 
+        </div>
+      </div>
+    </div>);
 }
 
 function Location_details() {
@@ -210,8 +338,8 @@ function Comment(loc) { // Need fix fix why can't fetch comments
 class NavList extends React.Component {
   render() {
     // a stub for detemining if the user is admin (todo: get from session if the user is admin)
-    let isAdmin = 0,
-      isUser = 1,
+    let isAdmin = 1,
+      isUser = 0,
       isNonUser = 0;
     {
       /*Set to 1 For testing diff user(!!!!!todo)*/
@@ -226,6 +354,12 @@ class NavList extends React.Component {
             &#xE88A;
           </span>
           <LongLink to="/" label="Home" />
+
+          <p>&nbsp;&nbsp;&nbsp;&nbsp;</p>
+          <span class="material-icons" style={{ color: "#484848" }}>
+            &#xE87D;
+          </span>
+          <LongLink to="/admin" label="Admin Page" />
         </>
       );
     else if (isUser == 1)
