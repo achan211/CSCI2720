@@ -220,6 +220,7 @@ function Admin_page(){
 }
 
 function Location_details() {
+  let [c, setC] = useState([])
   const [details, setDetails] = useState({
     Name: null,
     Latitude: null,
@@ -239,20 +240,6 @@ function Location_details() {
   let loc = useParams().loc;
 
   const fetchDetails = () => {
-    /*fetch("/location")
-    .then((res) => res.json())
-    .then((text) => {
-      for (let index = 0; index < text.length; index++) {
-        if( text[index].locName == loc){
-          setDetails({
-            num: index + 1,
-            locName: text[index].locName,
-            locLat: text[index].locLat,
-            locLong: text[index].locLong
-          });
-        }
-      }
-    });*/
     let link = "/location/" + loc;
     console.log(link);
     fetch(link)
@@ -272,13 +259,24 @@ function Location_details() {
     });
   };
 
+  const fetchComments = () => {
+    let link = "http://localhost:4000/comment/" + loc
+    fetch(link)
+    .then(r => r.json())
+    .then(data => {
+      console.log(data)
+      setC(data);
+    })
+  }
+ 
   React.useEffect(()=>{
     fetchDetails();
+    fetchComments();
   },[]);
 
   console.log(details);
   return (
-    <div class="container mt-3">
+    <div class="container mt-3 mb-3">
       <p class="mb-0"><br/></p>
       <h1>{details.Name}</h1>
       <p>
@@ -310,39 +308,18 @@ function Location_details() {
           Precipitation: {details.Precipitation}mm<br/>
           Visibillity: {details.Visibility}km<br/>
         </p>
-        <Comment loc={details.Name} />
+        <h3>Users' Comments: </h3>
+        <div>{c.length === 0 ? "No Comments for this Location." : c.map(row => { // mapping does not work...
+          <>
+          <h5>{row.user.username}</h5><br />
+          <p>{row.comment}</p>
+          </>
+        })}</div>
+        <h3>Your Comment</h3>
+        <textarea className="form-control form-control-lg mb-3" placeholder="Write your comments here."></textarea>
       </div>
     </div>
   );
-}
-
-function Comment({loc}) {
-  let [c, setC] = useState([])
-  let locName = loc // Not here
-  let link = "http://localhost:4000/comment/" + locName
-
-  React.useEffect(() => {
-    fetch(link)
-    .then(r => r.json())
-    .then(data => {
-      // console.log(data); // Something wrong in passing here...
-      // setComment(data);
-      setC(data);
-    });
-  }, []);
-
-  const test = () => {
-    console.log(link)
-    console.log(c)
-  }
-
-  return(
-    <>
-    <h2>User's Comments: </h2>
-    <div>Comment Section goes here!</div>
-    <button onClick={test}>Click Me!</button>
-    </>
-  )
 }
 
 class NavList extends React.Component {

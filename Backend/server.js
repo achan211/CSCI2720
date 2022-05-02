@@ -190,7 +190,6 @@ db.once("open", function () {
           .exec()
           .then((r) => {
             var string = JSON.stringify(r, null, 1);
-            res.set("Content-Type", "text/plain");
             res.status(200);
             res.send(string);
           });
