@@ -190,9 +190,27 @@ function Location_details() {
   );
 }
 
-function Comment(loc) {
-  locName = loc.location
-  console.log(locName)
+function Comment(loc) { // Need fix fix why can't fetch comments
+  const [com, setComment] = useState([]);
+  let locName = loc.location
+  let link = "/" + locName + "/comment"
+
+  useEffect(() => {
+    fetch(link)
+    .then(r => r.json())
+    .then(com => setComment(com));
+  }, []);
+
+  function test(){
+    console.log("Pressed!");
+    console.log(com);
+  }
+
+  return(
+    <>
+    <p>Not sure why can't fetch comments. Need Fix</p>
+    </>
+  )
 }
 
 class NavList extends React.Component {
