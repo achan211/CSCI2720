@@ -188,21 +188,31 @@ function Location_details() {
   );
 }
 
-function Comment(loc) { // Need fix fix why can't fetch comments
-  const [com, setComment] = useState([]);
-  let locName = loc.location
-  let link = "/" + locName + "/comment"
+function Comment({loc}) {
+  let [c, setC] = useState([])
+  let locName = loc // Not here
+  let link = "http://localhost:4000/comment/" + locName
 
-  useEffect(() => {
+  React.useEffect(() => {
     fetch(link)
     .then(r => r.json())
-    .then(data => setComment(data));
+    .then(data => {
+      // console.log(data); // Something wrong in passing here...
+      // setComment(data);
+      setC(data);
+    });
   }, []);
+
+  const test = () => {
+    console.log(link)
+    console.log(c)
+  }
 
   return(
     <>
     <h2>User's Comments: </h2>
     <div>Comment Section goes here!</div>
+    <button onClick={test}>Click Me!</button>
     </>
   )
 }
