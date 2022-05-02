@@ -295,6 +295,7 @@ class Logout extends React.Component {
 function Home() {
   const [data, setData] = useState([]);
   const [q, setQ] = useState("");
+  const [s, setS] = useState("locName");
 
   useEffect(() => {
     fetch("/location")
@@ -302,8 +303,17 @@ function Home() {
     .then(data => setData(data));
   }, []);
 
-  function search(rows) {
-    return rows.filter(row => row.locName.indexOf(q) > -1); // Need fix allow both Upper and Lower Case
+  function search(rows) { // Need fix allow both Upper and Lower Case
+    let filterRows = rows.filter(row => row.locName.indexOf(q) > -1);
+    let sortRows 
+    if (s === "locName") {
+      sortRows = filterRows.sort((a, b) => a.locName === b.locName ? 0 : a.locName > b.locName? 1 : -1);
+    } else if (s === "locLat") {
+      sortRows = filterRows.sort((a, b) => parseFloat(a.locLat) === parseFloat(b.locLat) ? 0 : parseFloat(a.locLat) > parseFloat(b.locLat) ? 1 : -1);
+    } else {
+      sortRows = filterRows.sort((a, b) => parseFloat(a.locLong) === parseFloat(b.locLong) ? 0 : parseFloat(a.locLong) > parseFloat(b.locLong) ? 1 : -1);
+    }
+    return sortRows;
   }
 
   return (
@@ -322,10 +332,12 @@ function Home() {
       <div class="col-4">
         <form class="d-flex">
         {/*----------!!!!!To do: sorting using dropdown list---------- */}
-        <select class="form-select" aria-label="Default select example">
+        <select class="form-select" aria-label="Default select example" onChange={e => {
+          setS(e.target.value);
+        }}>
           <option value="locName" selected>Location Name</option>
-          <option value="logLat">Latitude</option>
-          <option value="logLong">Longitude</option>
+          <option value="locLat">Latitude</option>
+          <option value="locLong">Longitude</option>
          </select>
          </form>
          </div>
