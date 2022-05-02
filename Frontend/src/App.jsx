@@ -163,7 +163,7 @@ function Location_details() {
         {/*----------Use this link to generate the src https://google-map-generator.com/ ---------- */}
         <iframe
           width="100%"
-          height="300"
+          height="400"
           id="gmap_canvas"
           src={
             "https://maps.google.com/maps?q="+ details.Name +"&t=k&z=11&ie=UTF8&iwloc=&output=embed"
@@ -173,18 +173,26 @@ function Location_details() {
           marginheight="0"
           marginwidth="0"
         ></iframe>
-        <h1><br/>
-          {details.Temperature}°C
-        </h1>
+        <h2>
+          Current Temperature {details.Temperature}°C
+        </h2>
         <p>
           Wind speed: {details.Wind_speed}kph {details.Wind_direction}<br/>
           Humidity: {details.Humidity}%<br/>
           Precipitation: {details.Precipitation}mm<br/>
           Visibillity: {details.Visibility}km<br/>
         </p>
+        <h2>User's Comments: </h2>
+        <div>Comment Section goes here!</div>
+        <Comment loc={details.Name} />
       </div>
     </div>
   );
+}
+
+function Comment(loc) {
+  locName = loc.location
+  console.log(locName)
 }
 
 class NavList extends React.Component {
@@ -340,6 +348,10 @@ function Home() {
 
 function Datatable({ fData }) {
   const columns = fData[0] && Object.keys(fData[0])
+  const navigate = useNavigate();
+  const handleRowClick = (link) => {
+    navigate(link);
+  }  
   
   return (
     <>
@@ -352,7 +364,7 @@ function Datatable({ fData }) {
         </tr>
       </thead>
       <tbody>
-        {fData.map(row => <tr>
+        {fData.map(row => <tr onClick={()=> handleRowClick("/location/" + row.locName)}>
           {
           columns.map(column => <td>{row[column]}</td>)
           }
