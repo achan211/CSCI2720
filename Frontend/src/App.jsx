@@ -380,15 +380,26 @@ function Location_details() {
   ));
   return (
     <div class="container mt-3 mb-3">
-      <p class="mb-0">
-        <br />
-      </p>
-      <h1>{details.Name}</h1>
-      <p>
-        {Math.abs(details.Latitude)}°{details.Latitude > 0 ? "N" : "S"}{" "}
-        {Math.abs(details.Longitude)}°{details.Longitude > 0 ? "E" : "W"}
-      </p>
-      <div class="gmap_canvas">
+      <div class="container m-0 pt-3 pb-4">
+        <div class="row justify-content-between">
+         <div class="col-auto">
+          <h1>{details.Name}</h1>
+          <span>
+            {Math.abs(details.Latitude)}°{details.Latitude > 0 ? "N" : "S"}{" "}
+            {Math.abs(details.Longitude)}°{details.Longitude > 0 ? "E" : "W"}&nbsp;
+          </span>
+         </div>
+          
+         <div class="col-auto align-self-center">
+          <button class="btn btn-danger d-inline-flex justify-content-center align-content-between">
+            <span class="material-icons">favorite</span>
+            <span>&nbsp;Add to favourites</span>
+          </button>
+         </div>
+        </div>
+      </div>
+
+      <div class="gmap_canvas mt-1">
         {/*----------Use this link to generate the src https://google-map-generator.com/ ---------- */}
         <iframe
           width="100%"
@@ -404,18 +415,37 @@ function Location_details() {
           marginheight="0"
           marginwidth="0"
         ></iframe>
-        <h2>Current Temperature: {details.Temperature}°C</h2>
-        <p>
-          Wind speed: {details.Wind_speed}kph {details.Wind_direction}
-          <br />
-          Humidity: {details.Humidity}%<br />
-          Precipitation: {details.Precipitation}mm
-          <br />
-          Visibillity: {details.Visibility}km
-          <br />
-        </p>
+      </div>
+      <div class="container mt-3 mb-4">
+        <div class="row">
+        <div class="col-auto p-0">{/*wanna have weather icon here but need work (if have time sin do la)*/}</div>
+          <div class="col-auto me-auto">
+            <h2>Current Temperature: {details.Temperature}°C</h2>
+            <p class="m-0">
+              Wind speed: {details.Wind_speed}kph {details.Wind_direction}
+              <br />
+              Humidity: {details.Humidity}%<br />
+              Precipitation: {details.Precipitation}mm
+              <br />
+              Visibillity: {details.Visibility}km
+              <br />
+            </p>
+          </div>
+
+          <div class="col-auto align-self-end">
+            <button class="btn btn-primary d-inline-flex justify-content-center align-content-between">
+              <span class="material-icons">refresh</span>
+              <span>&nbsp;Refresh</span>
+            </button>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="container mt-3 mb-3">
         <h3>Users' Comments: </h3>
         <div>{listItems.length===0 ? "No Comments for this Location." : listItems}</div>
+        <br />
         <h3>Your Comment</h3>
         <form>
           <textarea
@@ -425,6 +455,7 @@ function Location_details() {
           <button type="button" className="btn btn-secondary">Submit</button>
         </form>
       </div>
+
     </div>
   );
 }
