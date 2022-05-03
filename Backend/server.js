@@ -4,6 +4,7 @@ const express = require("express");
 const app = express();
 const path = require("path");
 const cors = require("cors");
+const bcrypt = require("bcryptjs");
 const mongoose = require("mongoose");
 mongoose.connect(
   "mongodb+srv://stu002:p233183-@csci2720.6hfif.mongodb.net/stu002"
