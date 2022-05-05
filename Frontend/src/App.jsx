@@ -325,6 +325,8 @@ function Location_details() {
     Visibility: null,
   });
 
+  const navigate = useNavigate()
+
   let loc = useParams().loc;
 
   const fetchDetails = () => {
@@ -363,6 +365,14 @@ function Location_details() {
       });
   };
 
+  const addComments = () => {
+    alert("Your comment has been submitted! \n (I'm still working on form action)")
+  }
+
+  const handleFavourite = () => {
+    alert("Favourite handling")
+  }
+
   React.useEffect(() => {
     fetchDetails();
     fetchComments();
@@ -387,7 +397,7 @@ function Location_details() {
          </div>
           
          <div class="col-auto align-self-center">
-          <button class="btn btn-danger d-inline-flex justify-content-center align-content-between">
+          <button class="btn btn-danger d-inline-flex justify-content-center align-content-between" onClick={() => handleFavourite()}>
             <span class="material-icons">favorite</span>
             <span>&nbsp;Add to favourites</span>
           </button>
@@ -448,10 +458,13 @@ function Location_details() {
             className="form-control form-control-lg mb-3"
             placeholder="Write your comments here."
           ></textarea>
-          <button type="button" className="btn btn-secondary">Submit</button>
+          <button type="button" className="btn btn-secondary" onClick={() => addComments()}>Submit</button>
         </form>
       </div>
 
+      <div className="d-flex justify-content-center">
+          <button type="button" className="btn btn-outline-secondary" onClick={() => navigate('/')}>Back to Homepage</button>
+      </div>
     </div>
   );
 }
