@@ -370,7 +370,21 @@ function Location_details() {
   }
 
   const handleFavourite = () => {
-    alert("Favourite handling")
+    let locName = details.Name
+    let username = "Alvin" // need to fix this by retriving the username from cookie
+    let link = "/favourite/" + username + "/" + locName
+    let bodytext = "username=" + username + "&locName=" + locName
+    console.log(link)
+    fetch(link, {
+      method: "PUT", 
+      headers: {"Content-Type": "application/x-www-form-urlencoded"},
+      body: bodytext})
+    .then(res => res.text())
+    .then(data => {
+        console.log(data);
+        let message = locName + " has been added to your favourite!"
+        alert(message)
+    })
   }
 
   React.useEffect(() => {
@@ -714,7 +728,7 @@ function FavTable() {
   };
   const [data, setData] = useState([]);
   React.useEffect(() => {
-    fetch("/favourite/admin")
+    fetch("/favourite/Alvin")
       .then((res) => res.json())
       .then((text) => {
         for (let index = 0; index < text.length; index++) {
