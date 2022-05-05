@@ -310,6 +310,7 @@ function Admin_page() {
   );
 }
 
+
 function Location_details() {
   const [c, setC] = useState([]);
   const [details, setDetails] = useState({
@@ -322,10 +323,6 @@ function Location_details() {
     Humidity: null,
     Precipitation: null,
     Visibility: null,
-    /*num: -1,
-    locName: "",
-    locLat: -1,
-    locLong: -1,*/
   });
 
   let loc = useParams().loc;
@@ -351,7 +348,7 @@ function Location_details() {
   };
 
   const fetchComments = () => {
-    let link = "http://localhost:4000/comment/" + loc;
+    let link = "/comment/" + loc;
     fetch(link)
       .then((r) => r.json())
       .then((data) => {
@@ -371,7 +368,6 @@ function Location_details() {
     fetchComments();
   }, []);
 
-  // console.log(details);
   var listItems = c.map((row) => (
     <div>
       <h5>{row.username}</h5>
@@ -484,6 +480,12 @@ class NavList extends React.Component {
           <span class="material-icons" style={{ color: "#484848" }}>
             &#xE87D;
           </span>
+          <LongLink to="/favloc" label="My Favourite Locations" />
+
+          <p>&nbsp;&nbsp;&nbsp;&nbsp;</p>
+          <span class="material-icons" style={{ color: "#484848" }}>
+            &#xE8B8;
+          </span>
           <LongLink to="/admin" label="Admin Page" />
         </>
       );
@@ -504,7 +506,9 @@ class NavList extends React.Component {
           <LongLink to="/favloc" label="My favourite location" />
         </>
       );
-    else if (isNonUser == 1) return;
+    else if (isNonUser == 1) return (
+      "Hello World"
+    );
   }
 }
 
@@ -689,19 +693,15 @@ function Datatable({ fData }) {
   );
 }
 
-function Table() {
+function FavTable() {
   //for redirect to seperate view to each location
   const navigate = useNavigate();
   const handleRowClick = (link) => {
     navigate(link);
   };
-  // a stub for creating location info (todo: get location info from database)
-  //   const data =[{num: 1 , locName: "New York", locLat: 40.712, locLong: -74.0059},
-  //   {num: 2 , locName: "Hong Kong", locLat: 22.302, locLong: 114.177},
-  //   {num: 3 , locName: "London", locLat: 51.507, locLong: -0.127}];
   const [data, setData] = useState([]);
   React.useEffect(() => {
-    fetch("/favourite/test")
+    fetch("/favourite/admin")
       .then((res) => res.json())
       .then((text) => {
         for (let index = 0; index < text.length; index++) {
@@ -728,6 +728,8 @@ function Table() {
 
   return (
     <>
+      {listItems.length == 0 ? <p className="lead">Opps! You've no favourite locations. Maybe starting adding some!</p> : 
+      <div>
       <table class="table table-hover">
         <thead>
           <tr>
@@ -737,26 +739,30 @@ function Table() {
             <th scope="col">Longitude</th>
           </tr>
         </thead>
-        <tbody>{!listItems ? "Loading..." : listItems}</tbody>
-      </table>
+        <tbody>{listItems}</tbody>
+        </table>
+      </div>
+      }
     </>
   );
 }
 
-class FavLoc extends React.Component {
-  render() {
-    return (
-      <>
-        <div class="container">
-          <br />
-          <div class="text-center">
-            <h2>My favourite Location</h2>
-          </div>
-          <Table />
+function FavLoc () {
+  const navigate = useNavigate();
+  return (
+    <>
+      <div class="container">
+        <br />
+        <div class="text-center">
+          <h2>My Favourite Locations</h2>
         </div>
-      </>
-    );
-  }
+        <FavTable />
+        <div className="d-flex justify-content-center">
+          <button type="button" className="btn btn-outline-secondary" onClick={() => navigate('/')}>Back to Homepage</button>
+        </div>
+      </div>
+    </>
+  );
 }
 
 class Login extends React.Component {
