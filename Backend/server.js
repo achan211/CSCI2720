@@ -108,7 +108,7 @@ db.once("open", function () {
       // Check password
       bcrypt.compare(password, user.pwd).then((isMatch) => {
         if (isMatch) {
-          res.setHeader("Set-Cookie", "loggined=true");
+          res.setHeader("Set-Cookie", "loggined=true"); // TO DO: set username in cookie
           res.send("login successful");
         } else {
           return res

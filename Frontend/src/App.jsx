@@ -89,7 +89,7 @@ function NoMatch() {
   );
 }
 
-// TO DO: User UD, Location UD
+// TO DO: User and Location Update
 function Admin_page() {
   const [locData, setlocData] = useState([]);
   const [userData, setuserData] = useState([]);
@@ -100,8 +100,8 @@ function Admin_page() {
 
   const [locAction, setLA] = useState("Choose");
   const [locName, setLN] = useState("");
-  const [locLat, setLat] = useState("");
-  const [locLong, setLong] = useState("");
+  // const [locLat, setLat] = useState("");
+  // const [locLong, setLong] = useState("");
 
   const CRUDLocation = (e) => {
     e.preventDefault();
@@ -110,7 +110,7 @@ function Admin_page() {
     } else {
       switch (locAction){
         case "c":
-          if (locName == "" || locLat == "" || locLong == "") {
+          if (locName == "") {
             alert("Missing information.")
           } else {
             let bodytext = "locName=" + locName
@@ -144,7 +144,11 @@ function Admin_page() {
           alert("Update")
           break;
         case "d":
-          alert("Delete")
+          fetch("/location/" + locName, {method: 'DELETE'})
+          .then(data => {
+            alert("Location " + locName + " is deleted.")
+          })
+          console.log(locName)
           break;
       }
     }
@@ -286,7 +290,7 @@ function Admin_page() {
                 id="locname" onChange={(e) => {setLN(e.target.value);}}
               />
             </div>
-            <div class="mb-3">
+            {/* <div class="mb-3">
               <label for="locLat" class="form-label">
                 Latitude
               </label>
@@ -299,8 +303,8 @@ function Admin_page() {
               <div id="locLachelp" class="form-text">
                 Leave blank if delete or retrive location.
               </div>
-            </div>
-            <div class="mb-3">
+            </div> */}
+            {/* <div class="mb-3">
               <label for="locLong" class="form-label">
                 Longtitude
               </label>
@@ -313,7 +317,7 @@ function Admin_page() {
               <div id="locLonghelp" class="form-text">
                 Leave blank if delete or retrive location.
               </div>
-            </div>
+            </div> */}
             <div class="row gx-2">
               <button type="submit" className="btn btn-outline-secondary">Submit</button>
             </div>
@@ -885,7 +889,7 @@ class Login extends React.Component {
   }
 }
 
-// Implement this only if have time!
+// Check Check if any error
 class CreateAccount extends React.Component {
   handleConfirm() {
     {
