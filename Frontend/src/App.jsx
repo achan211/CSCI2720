@@ -89,6 +89,7 @@ function NoMatch() {
   );
 }
 
+// TO DO: Admin CRUD!
 function Admin_page() {
   const [locData, setlocData] = useState([]);
   const [userData, setuserData] = useState([]);
@@ -96,19 +97,60 @@ function Admin_page() {
     fetch("/location")
       .then((r) => r.json())
       .then((data) => setlocData(data));
-
-    fetch("/user")
-      .then((r) => r.json())
-      .then((data) => setuserData(data));
   }, []);
+
+  const [userAction, setUA] = useState("Choose");
+  const [userName, setU] = useState("");
+  const [pwd, setP] = useState("");
 
   const CRUDLocation = (action) => {
     //todo
   };
 
-  const CRUDUser = (action) => {
-    //todo
+  const CRUDUser = (e) => {
+    e.preventDefault();
+    if (userAction == "Choose") {
+      alert("Please choose an action.")
+    } else {
+      switch (userAction){
+        case "c":
+          if (userName === "" || pwd === "") {
+            alert("Missing information.")
+          } else {
+            let bodytext = "username=" + userName + "&pwd=" + pwd
+
+            fetch("/user", {
+                method: "POST", 
+                headers: {"Content-Type": "application/x-www-form-urlencoded"},
+                body: bodytext})
+            .then(res => res.text())
+            .then(data => console.log(data))
+            alert("User is created! Please check!")
+          }
+          break;
+        case "r":
+          if (userName === "") {
+            fetch("/user")
+            .then((r) => r.json())
+            .then((data) => setuserData(data));
+          } else {
+            fetch("/user?username=" + userName)
+            .then((r) => r.json())
+            .then((data) => {
+              setuserData(data);
+            });
+          }
+          break;
+        case "u":
+          alert("Update")
+          break;
+        case "d":
+          alert("Delete")
+          break;
+      }
+    }
   };
+  
 
   const columns = userData[0] && Object.keys(userData[0]);
 
@@ -119,8 +161,44 @@ function Admin_page() {
       <br />
       <div class="row">
         <div class="col">
-          <h2>Users</h2>
-          <table class="table table-hover">
+          <h2>CRUD Users</h2>
+          <form onSubmit={(e) => CRUDUser(e)}>
+            <div className="mb-3">
+            <select className="form-select" aria-label="Default select example" onChange={(e) => {setUA(e.target.value);}}>
+              <option value="Choose" disabled selected>Choose an action</option>
+              <option value="c">Create User</option>
+              <option value="r">Retrieve User</option>
+              <option value="u">Update User</option>
+              <option value="d">Delete User</option>
+            </select>
+            </div>
+            <div class="mb-3">
+              <label for="username" class="form-label">
+                Username
+              </label>
+              <input type="text" class="form-control" onChange={(e) => {setU(e.target.value);}} />
+            </div>
+            <div class="mb-3">
+              <label for="Password" class="form-label">
+                Password
+              </label>
+              <input
+                type="password"
+                class="form-control"
+                id="Password"
+                aria-describedby="passwordhelp" onChange={(e) => {setP(e.target.value);}}
+              />
+              <div id="passwordhelp" class="form-text">
+                Leave blank if delete or retrive user.
+              </div>
+            </div>
+            <div class="row gx-2">
+              <button type="submit" className="btn btn-outline-secondary">Submit</button>
+            </div>
+          </form>
+          <hr />
+          {userData.length == 0 ? "" : <>
+            <table class="table table-hover">
             <thead>
               <tr>
                 <th scope="col">Username</th>
@@ -137,79 +215,10 @@ function Admin_page() {
               ))}
             </tbody>
           </table>
-
-          <br />
-          <h2>CRUD Users</h2>
-          <form>
-            <div class="mb-3">
-              <label for="username" class="form-label">
-                Username
-              </label>
-              <input type="text" class="form-control" id="username" />
-            </div>
-            <div class="mb-3">
-              <label for="Password" class="form-label">
-                Password
-              </label>
-              <input
-                type="password"
-                class="form-control"
-                id="Password"
-                aria-describedby="passwordhelp"
-              />
-              <div id="passwordhelp" class="form-text">
-                Leave blank if delete or retrive user.
-              </div>
-            </div>
-            <div class="row gx-2">
-              <div class="col">
-                <button
-                  type="submit"
-                  class="btn btn-success"
-                  onClick={() => CRUDUser("Create")}
-                >
-                  Create
-                </button>
-              </div>
-              <div class="col">
-                <button
-                  type="submit"
-                  class="btn btn-primary"
-                  onClick={() => CRUDUser("Retrive")}
-                >
-                  Retrive
-                </button>
-              </div>
-              <div class="col">
-                <button
-                  type="submit"
-                  class="btn btn-primary"
-                  onClick={() => CRUDUser("Update")}
-                >
-                  Update
-                </button>
-              </div>
-              <div class="col">
-                <button
-                  type="submit"
-                  class="btn btn-danger"
-                  onClick={() => CRUDUser("Delete")}
-                >
-                  Delete
-                </button>
-              </div>
-            </div>
-          </form>
-
-          <br />
-          <div id="retrived_user_data">Retrived user data goes here</div>
+          </>}
         </div>
 
         <div class="col">
-          <h2>Locations</h2>
-          <Datatable fData={locData} />
-
-          <br />
           <h2>CRUD Locations</h2>
           <br />
           <form>
@@ -291,15 +300,16 @@ function Admin_page() {
               </div>
             </div>
           </form>
-          <br />
-          <div id="retrived_loc_data">Retrived location data goes here</div>
+          <hr />
+          <h2>Locations</h2>
+          <Datatable fData={locData} />
         </div>
       </div>
     </div>
   );
 }
 
-
+// TO DO: Change username from Alvin to user based on cookie / session!
 function Location_details() {
   const [c, setC] = useState([]);
   const[nc, setNC] = useState("");
@@ -318,7 +328,7 @@ function Location_details() {
 
 
   let locName = details.Name
-  let username = "Alvin" // need to fix this by retriving the username from cookie
+  let username = "Alvin"
   let loc = useParams().loc;
 
   const fetchDetails = () => {
@@ -490,6 +500,7 @@ function Location_details() {
   );
 }
 
+// TO DO: For non-user?
 class NavList extends React.Component {
   render() {
     // a stub for detemining if the user is admin (todo: get from session if the user is admin)
@@ -546,6 +557,7 @@ class NavList extends React.Component {
   }
 }
 
+// Not working!!
 class Logout extends React.Component {
   // a stub for detemining if the user is admin (todo: get from session if the user is admin)
 
@@ -589,6 +601,7 @@ class Logout extends React.Component {
   }
 }
 
+// TO DO: Map icon to each location view!
 function Home() {
   const [data, setData] = useState([]);
   const [q, setQ] = useState("");
@@ -669,7 +682,6 @@ function Home() {
               </div>
             </div>
             <Datatable fData={search(data)} />
-            {/*----------!!!!!todo: loc data tranfer by props??---------- */}
           </div>
           <div class="col-5">
             <div class="mapouter">
@@ -727,8 +739,8 @@ function Datatable({ fData }) {
   );
 }
 
+// TO DO: Change from Alvin to user (by cookie / session)!
 function FavTable() {
-  //for redirect to seperate view to each location
   const navigate = useNavigate();
   const handleRowClick = (link) => {
     navigate(link);
@@ -750,7 +762,6 @@ function FavTable() {
       });
   }, []);
 
-  //please put link in handleRowClick
   var listItems = data.map((data) => (
     <tr onClick={() => handleRowClick("/location/" + data.locName)}>
       <th scope="row">{data.num}</th>
@@ -799,6 +810,7 @@ function FavLoc () {
   );
 }
 
+// TO DO: Not yet implemented!
 class Login extends React.Component {
   render() {
     return (
@@ -853,6 +865,7 @@ class Login extends React.Component {
   }
 }
 
+// Implement this only if have time!
 class CreateAccount extends React.Component {
   handleConfirm() {
     {

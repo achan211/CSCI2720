@@ -56,8 +56,8 @@ db.once("open", function () {
   });
 
   // TO DO - Urgent:
+  // Map icons for each location (Frontend)
   // Admin CRUD Page for Users and Locations (Frontend)
-  // Favourite Location View, and Add Favourite Button
   // Show username and Login/Logout (Jimmy - Session / Backend?)
   // Admin have button at seperate Location views to refresh Location temperature data (Frontend for button, Backend for update data)
   // function Login (Frontend + Jimmy)
@@ -424,19 +424,11 @@ db.once("open", function () {
 
   //Admin Create User-->DONE
   app.post("/user", (req, res) => {
-    if (req.body["admin"] == "false") {
-      var Ad = false;
-    } else if (req.body["admin"] == "true") {
-      var Ad = true;
-    } else {
-      var Ad = null;
-    }
-    if (Ad != null) {
-      const newUser = new User({
-        username: req.body["username"],
-        pwd: req.body["pwd"],
-        admin: Ad,
-      });
+    const newUser = new User({
+      username: req.body["username"],
+      pwd: req.body["pwd"],
+      admin: false,
+    });
 
       bcrypt.genSalt(10, (err, salt) => {
         bcrypt.hash(newUser.pwd, salt, (err, hash) => {
@@ -453,36 +445,24 @@ db.once("open", function () {
           );
         });
       });
-    } else {
-      res.status(404).send("Cannot create user");
-    }
   });
 
   // Admin Retrieve User Data // search query-->DONE
   app.get("/user", (req, res) => {
     if (req.query["username"] != null) { // if have query
-      var query = User.findOne({
-        username: req.query["username"],
-        pwd: req.query["pwd"],
+      var query = User.find({
+        username: req.query["username"]
       });
-  
-      query.select("-_id username admin favourite");
-      query
-        .populate("favourite", "-_id locName")
-        .exec()
-        .then(
-          (results) => {
-            if (results == null) res.send("There is no user available");
-            else {
-              var event = JSON.stringify(results, null, "\t");
-              res.send(event);
-            }
-          },
-          (error) => {
-            res.contentType("text/plain");
-            res.send(error);
-          }
-        );
+      query.select("-_id username pwd");
+      query.exec().then(
+        (results) => {
+          res.send(results);
+        },
+        (err) => {
+          res.contentType("text/plain");
+          res.send(err);
+        }
+      )
     } else {
       var query = User.find(); // if have no query then it means search all
       query.select("-_id username pwd");
@@ -507,13 +487,10 @@ db.once("open", function () {
   // Can user update favourite location?
   // this part assume not ok
   app.put("/user", (req, res) => {
-    //req.query
     var query = Location.findOneAndUpdate(
       { username: req.body["username"], pwd: req.body["pwd"] },
       {
         username: req.body["newusername"],
-        pwd: req.body["newpwd"],
-        admin: req.body["admin"],
       }
     );
     query.exec().then(
