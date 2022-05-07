@@ -244,8 +244,8 @@ db.once("open", function () {
   });
 
   // Admin Create Location (create by locat name)-->DONE
-  app.post("/location/:locName", (req, res) => {
-    var name = req.params["locName"];
+  app.post("/location", (req, res) => {
+    var name = req.body["locName"];
     var link =
       `http://api.weatherapi.com/v1/current.json?key=${api_key}&q=` + name;
     fetch(link)
@@ -327,8 +327,8 @@ db.once("open", function () {
 
   // Search matching location
   // use form submit to pass the searching location
-  app.post("/searchLoc", (req, res) => {
-    var search = req.body["search"];
+  app.get("/searchLoc", (req, res) => {
+    var search = req.query["search"];
     var query = Location.find({ locName: { $regex: new RegExp(search,"i") } });
     query.select("-_id locName locLat locLong");
     query.exec().then(

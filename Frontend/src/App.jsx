@@ -89,7 +89,7 @@ function NoMatch() {
   );
 }
 
-// TO DO: User UD, Location CUD
+// TO DO: User UD, Location UD
 function Admin_page() {
   const [locData, setlocData] = useState([]);
   const [userData, setuserData] = useState([]);
@@ -110,7 +110,20 @@ function Admin_page() {
     } else {
       switch (locAction){
         case "c":
-          alert("Create")
+          if (locName == "" || locLat == "" || locLong == "") {
+            alert("Missing information.")
+          } else {
+            let bodytext = "locName=" + locName
+            fetch("/location", {
+              method: "POST", 
+              headers: {"Content-Type": "application/x-www-form-urlencoded"},
+              body: bodytext})
+            .then(data => {
+              console.log(locName)
+              console.log(data);
+              alert("You've created " + locName);
+            })
+          }
           break;
         case "r":
           if (locName == "") {
@@ -118,10 +131,10 @@ function Admin_page() {
             .then((r) => r.json())
             .then((data) => setlocData(data));
           } else {
-            fetch("/location/" + locName)
+            fetch("/searchLoc?search=" + locName)
             .then((r) => r.json())
             .then((data) => {
-              let format = [{Name: data.Name, Latitude: data.Latitude, Longitude: data.Longitude}]
+              let format = [{Name: data[0].locName, Latitude: data[0].locLat, Longitude: data[0].locLong}]
               console.log(format);
               setlocData(format);
             });
@@ -175,7 +188,11 @@ function Admin_page() {
           alert("Update")
           break;
         case "d":
-          alert("Delete")
+          fetch("/user/" + userName, {method: 'DELETE'})
+          .then(data => {
+            alert("User " + userName + " is deleted.")
+          })
+          console.log(userName)
           break;
       }
     }
@@ -266,8 +283,7 @@ function Admin_page() {
               <input
                 type="text"
                 class="form-control"
-                id="locname"
-                aria-describedby="emailHelp" onChange={(e) => {setLN(e.target.value);}}
+                id="locname" onChange={(e) => {setLN(e.target.value);}}
               />
             </div>
             <div class="mb-3">
@@ -275,10 +291,10 @@ function Admin_page() {
                 Latitude
               </label>
               <input
-                type="number"
+                type="float"
                 class="form-control"
                 id="locLac"
-                aria-describedby="locLachelp"
+                aria-describedby="locLachelp" onChange={(e) => {setLat(e.target.value);}}
               />
               <div id="locLachelp" class="form-text">
                 Leave blank if delete or retrive location.
@@ -289,10 +305,10 @@ function Admin_page() {
                 Longtitude
               </label>
               <input
-                type="number"
+                type="float"
                 class="form-control"
                 id="locLong"
-                aria-describedby="locLonghelp"
+                aria-describedby="locLonghelp" onChange={(e) => {setLong(e.target.value);}}
               />
               <div id="locLonghelp" class="form-text">
                 Leave blank if delete or retrive location.
@@ -332,7 +348,7 @@ function Location_details() {
 
 
   let locName = details.Name
-  let username = "CaCa"
+  let username = "Alvin"
   let loc = useParams().loc;
 
   const fetchDetails = () => {
