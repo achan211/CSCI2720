@@ -89,22 +89,52 @@ function NoMatch() {
   );
 }
 
-// TO DO: Admin CRUD!
+// TO DO: User UD, Location CUD
 function Admin_page() {
   const [locData, setlocData] = useState([]);
   const [userData, setuserData] = useState([]);
-  useEffect(() => {
-    fetch("/location")
-      .then((r) => r.json())
-      .then((data) => setlocData(data));
-  }, []);
 
   const [userAction, setUA] = useState("Choose");
   const [userName, setU] = useState("");
   const [pwd, setP] = useState("");
 
-  const CRUDLocation = (action) => {
-    //todo
+  const [locAction, setLA] = useState("Choose");
+  const [locName, setLN] = useState("");
+  const [locLat, setLat] = useState("");
+  const [locLong, setLong] = useState("");
+
+  const CRUDLocation = (e) => {
+    e.preventDefault();
+    if (locAction == "Choose") {
+      alert("Please choose an action.")
+    } else {
+      switch (locAction){
+        case "c":
+          alert("Create")
+          break;
+        case "r":
+          if (locName == "") {
+            fetch("/location")
+            .then((r) => r.json())
+            .then((data) => setlocData(data));
+          } else {
+            fetch("/location/" + locName)
+            .then((r) => r.json())
+            .then((data) => {
+              let format = [{Name: data.Name, Latitude: data.Latitude, Longitude: data.Longitude}]
+              console.log(format);
+              setlocData(format);
+            });
+          }
+          break;
+        case "u":
+          alert("Update")
+          break;
+        case "d":
+          alert("Delete")
+          break;
+      }
+    }
   };
 
   const CRUDUser = (e) => {
@@ -150,7 +180,6 @@ function Admin_page() {
       }
     }
   };
-  
 
   const columns = userData[0] && Object.keys(userData[0]);
 
@@ -220,8 +249,16 @@ function Admin_page() {
 
         <div class="col">
           <h2>CRUD Locations</h2>
-          <br />
-          <form>
+          <form onSubmit={(e) => CRUDLocation(e)}>
+          <div className="mb-3">
+            <select className="form-select" aria-label="Default select example" onChange={(e) => {setLA(e.target.value);}}>
+              <option value="Choose" disabled selected>Choose an action</option>
+              <option value="c">Create Location</option>
+              <option value="r">Retrieve Location</option>
+              <option value="u">Update Location</option>
+              <option value="d">Delete Location</option>
+            </select>
+            </div>
             <div class="mb-3">
               <label for="locname" class="form-label">
                 Location
@@ -230,7 +267,7 @@ function Admin_page() {
                 type="text"
                 class="form-control"
                 id="locname"
-                aria-describedby="emailHelp"
+                aria-describedby="emailHelp" onChange={(e) => {setLN(e.target.value);}}
               />
             </div>
             <div class="mb-3">
@@ -262,47 +299,14 @@ function Admin_page() {
               </div>
             </div>
             <div class="row gx-2">
-              <div class="col">
-                <button
-                  type="submit"
-                  class="btn btn-success"
-                  onClick={() => CRUDLocation("Create")}
-                >
-                  Create
-                </button>
-              </div>
-              <div class="col">
-                <button
-                  type="submit"
-                  class="btn btn-primary"
-                  onClick={() => CRUDLocation("Retrive")}
-                >
-                  Retrive
-                </button>
-              </div>
-              <div class="col">
-                <button
-                  type="submit"
-                  class="btn btn-primary"
-                  onClick={() => CRUDLocation("Update")}
-                >
-                  Update
-                </button>
-              </div>
-              <div class="col">
-                <button
-                  type="submit"
-                  class="btn btn-danger"
-                  onClick={() => CRUDLocation("Delete")}
-                >
-                  Delete
-                </button>
-              </div>
+              <button type="submit" className="btn btn-outline-secondary">Submit</button>
             </div>
           </form>
           <hr />
+          {locData.length == 0 ? "": <>
           <h2>Locations</h2>
           <Datatable fData={locData} />
+          </>}
         </div>
       </div>
     </div>
@@ -328,7 +332,7 @@ function Location_details() {
 
 
   let locName = details.Name
-  let username = "Alvin"
+  let username = "CaCa"
   let loc = useParams().loc;
 
   const fetchDetails = () => {
