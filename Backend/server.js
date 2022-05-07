@@ -460,30 +460,47 @@ db.once("open", function () {
 
   // Admin Retrieve User Data // search query-->DONE
   app.get("/user", (req, res) => {
-    //req.query
-    //console.log(req.query)
-    var query = User.findOne({
-      username: req.query["username"],
-      pwd: req.query["pwd"],
-    });
-
-    query.select("-_id username admin favourite");
-    query
-      .populate("favourite", "-_id locName")
-      .exec()
-      .then(
+    if (req.query["username"] != null) { // if have query
+      var query = User.findOne({
+        username: req.query["username"],
+        pwd: req.query["pwd"],
+      });
+  
+      query.select("-_id username admin favourite");
+      query
+        .populate("favourite", "-_id locName")
+        .exec()
+        .then(
+          (results) => {
+            if (results == null) res.send("There is no user available");
+            else {
+              var event = JSON.stringify(results, null, "\t");
+              res.send(event);
+            }
+          },
+          (error) => {
+            res.contentType("text/plain");
+            res.send(error);
+          }
+        );
+    } else {
+      var query = User.find(); // if have no query then it means search all
+      query.select("-_id username pwd");
+      query.exec().then(
         (results) => {
-          if (results == null) res.send("There is no user available");
-          else {
-            var event = JSON.stringify(results, null, "\t");
-            res.send(event);
+          if (results == null) {
+            res
+              .status(404)
+              .send("Something is wrong.");
+          } else {
+            res.send(results);
           }
         },
-        (error) => {
+        (err) => {
           res.contentType("text/plain");
-          res.send(error);
+          res.send(err);
         }
-      );
+      )}
   });
 
   // Admin Update User Data -->DONE

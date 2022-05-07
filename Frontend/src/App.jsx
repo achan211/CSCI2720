@@ -1,5 +1,3 @@
-// const {BrowserRouter, Routes, Route, Link} = ReactRouterDOM;
-// const {useMatch, useParams, useLocation} = ReactRouterDOM;
 import ReactDOM from "react-dom";
 import "./App.css";
 import React, { useEffect } from "react";
@@ -59,7 +57,6 @@ function App() {
             <Route path="/admin" element={<Admin_page />} />
             <Route path="*" element={<NoMatch />} />
           </Routes>
-          {/*<p>{!data ? "Loading..." : data}</p>*/}
         </div>
       </BrowserRouter>
     </>
@@ -100,7 +97,7 @@ function Admin_page() {
       .then((r) => r.json())
       .then((data) => setlocData(data));
 
-    fetch("/user") //haven't create any user yet so have error
+    fetch("/user")
       .then((r) => r.json())
       .then((data) => setuserData(data));
   }, []);
@@ -128,8 +125,6 @@ function Admin_page() {
               <tr>
                 <th scope="col">Username</th>
                 <th scope="col">Password</th>
-                <th scope="col">Admin</th>
-                <th scope="col">Favourate</th>
               </tr>
             </thead>
             <tbody>
@@ -165,12 +160,6 @@ function Admin_page() {
               <div id="passwordhelp" class="form-text">
                 Leave blank if delete or retrive user.
               </div>
-            </div>
-            <div class="mb-3 form-check">
-              <input type="checkbox" class="form-check-input" id="Check" />
-              <label class="form-check-label" for="Check">
-                Admin?
-              </label>
             </div>
             <div class="row gx-2">
               <div class="col">
