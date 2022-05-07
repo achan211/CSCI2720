@@ -134,7 +134,6 @@ db.once("open", function () {
       .exec()
       .then((r) => {
         user_id = r._id;
-        console.log(user_id);
         return user_id;
       })
       .then(() => {

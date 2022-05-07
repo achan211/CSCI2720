@@ -313,6 +313,7 @@ function Admin_page() {
 
 function Location_details() {
   const [c, setC] = useState([]);
+  const[nc, setNC] = useState("");
   const [details, setDetails] = useState({
     Name: null,
     Latitude: null,
@@ -324,9 +325,11 @@ function Location_details() {
     Precipitation: null,
     Visibility: null,
   });
-
   const navigate = useNavigate()
 
+
+  let locName = details.Name
+  let username = "Alvin" // need to fix this by retriving the username from cookie
   let loc = useParams().loc;
 
   const fetchDetails = () => {
@@ -359,19 +362,32 @@ function Location_details() {
             username: data[index].user.username,
             comment: data[index].comment,
           };
-          console.log(d);
           setC((olddata) => [...olddata, d]);
         }
       });
   };
 
-  const addComments = () => {
-    alert("Your comment has been submitted! \n (I'm still working on form action)")
+  const addComments = (e) => {
+    e.preventDefault();
+    // Updating Server
+    let bodytext = "username=" + username + "&locName=" + locName + "&comment=" + nc
+
+    fetch("http://localhost:4000/newComment", {
+         method: "POST", 
+         headers: {"Content-Type": "application/x-www-form-urlencoded"},
+         body: bodytext})
+    .then(res => res.text())
+    .then(data => console.log(data))
+    alert("Your comment has been submitted!")
+    var newComment = {username: username, comment: nc}
+    setC((olddata) => [...olddata, newComment]);
+  }
+
+  const handleCommentChange = (e) => {
+    setNC(e.target.value)
   }
 
   const handleFavourite = () => {
-    let locName = details.Name
-    let username = "Alvin" // need to fix this by retriving the username from cookie
     let link = "/favourite/" + username + "/" + locName
     let bodytext = "username=" + username + "&locName=" + locName
     console.log(link)
@@ -461,18 +477,20 @@ function Location_details() {
 
         </div>
       </div>
-
+      {/* User Comment Form */}
       <div class="container mt-3 mb-3">
         <h3>Users' Comments: </h3>
         <div>{listItems.length===0 ? "No Comments for this Location." : listItems}</div>
         <br />
         <h3>Your Comment</h3>
-        <form>
+        <form onSubmit={(e) => addComments(e)}>
           <textarea
             className="form-control form-control-lg mb-3"
             placeholder="Write your comments here."
+            id="comment"
+            onChange={(e) => handleCommentChange(e)}
           ></textarea>
-          <button type="button" className="btn btn-secondary" onClick={() => addComments()}>Submit</button>
+          <button type="submit" className="btn btn-secondary">Submit</button>
         </form>
       </div>
 
