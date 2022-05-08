@@ -483,14 +483,13 @@ db.once("open", function () {
       )}
   });
 
-  // Admin Update User Data -->DONE
-  // Can user update favourite location?
-  // this part assume not ok
+  // Admin Update User Data - DONE!
   app.put("/user", (req, res) => {
-    var query = Location.findOneAndUpdate(
+    var query = User.findOneAndUpdate(
       { username: req.body["username"], pwd: req.body["pwd"] },
       {
         username: req.body["newusername"],
+        pwd: req.body["newpassword"],
       }
     );
     query.exec().then(

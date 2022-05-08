@@ -89,7 +89,7 @@ function NoMatch() {
   );
 }
 
-// TO DO: User and Location Update
+// TO DO: User Update
 function Admin_page() {
   const [locData, setlocData] = useState([]);
   const [userData, setuserData] = useState([]);
@@ -97,11 +97,11 @@ function Admin_page() {
   const [userAction, setUA] = useState("Choose");
   const [userName, setU] = useState("");
   const [pwd, setP] = useState("");
+  const [newUserName, setNU] = useState("");
+  const [newPwd, setNP] = useState("");
 
   const [locAction, setLA] = useState("Choose");
   const [locName, setLN] = useState("");
-  // const [locLat, setLat] = useState("");
-  // const [locLong, setLong] = useState("");
 
   const CRUDLocation = (e) => {
     e.preventDefault();
@@ -141,14 +141,37 @@ function Admin_page() {
           }
           break;
         case "u":
-          alert("Update")
+          if (locName == "") {
+            alert("Missing information.")
+          } else {
+            fetch("/location/" + locName, {
+              method: "PUT", 
+              headers: {"Content-Type": "application/x-www-form-urlencoded"},
+            })
+            .then(data => {
+              console.log(data);
+              if (data.ok) {
+                alert("You've updated " + locName);
+              } else {
+                alert("No Location " + locName + " in database. \nPlease create this location.")
+              }
+            })
+          }
           break;
         case "d":
-          fetch("/location/" + locName, {method: 'DELETE'})
-          .then(data => {
-            alert("Location " + locName + " is deleted.")
-          })
-          console.log(locName)
+          if (locName == "") {
+            alert("Missing information.")
+          } else {
+            fetch("/location/" + locName, {method: 'DELETE'})
+            .then(data => {
+              if (data.ok) {
+                alert("Location " + locName + " is deleted.")
+              } else {
+                alert("There was no " + locName + " in the database.")
+              }
+            })
+            console.log(locName)
+          }
           break;
       }
     }
@@ -189,12 +212,24 @@ function Admin_page() {
           }
           break;
         case "u":
-          alert("Update")
+          let bodytext = "username=" + userName + "&pwd=" + pwd + "&newusername=" + newUserName + "&newpassword=" + newPwd
+          fetch("/user", {
+            method: "PUT", 
+            headers: {"Content-Type": "application/x-www-form-urlencoded"},
+            body: bodytext})
+          .then(res => res.json())
+          .then(data => {
+            alert("User update success!");
+          })
           break;
         case "d":
           fetch("/user/" + userName, {method: 'DELETE'})
           .then(data => {
-            alert("User " + userName + " is deleted.")
+            if (data.ok) {
+              alert("User " + userName + " is deleted.")
+            } else {
+              alert("There was no " + userName + " in the database.")
+            }
           })
           console.log(userName)
           break;
@@ -228,6 +263,15 @@ function Admin_page() {
               </label>
               <input type="text" class="form-control" onChange={(e) => {setU(e.target.value);}} />
             </div>
+            {userAction == "u" ? <>
+            <div class="mb-3">
+              <label for="username" class="form-label">
+                New Username
+              </label>
+              <input type="text" class="form-control" onChange={(e) => {setNU(e.target.value)}} />
+            </div>
+            </>: ""}
+            {userAction == "c" || userAction == "u" ? <>
             <div class="mb-3">
               <label for="Password" class="form-label">
                 Password
@@ -238,10 +282,16 @@ function Admin_page() {
                 id="Password"
                 aria-describedby="passwordhelp" onChange={(e) => {setP(e.target.value);}}
               />
-              <div id="passwordhelp" class="form-text">
-                Leave blank if delete or retrive user.
-              </div>
             </div>
+            </>: ""}
+            {userAction == "u" ? <>
+            <div class="mb-3">
+              <label for="password" class="form-label">
+                New Password
+              </label>
+              <input type="password" class="form-control" onChange={(e) => {setNP(e.target.value)}} />
+            </div>
+            </>: ""}
             <div class="row gx-2">
               <button type="submit" className="btn btn-outline-secondary">Submit</button>
             </div>
@@ -289,35 +339,10 @@ function Admin_page() {
                 class="form-control"
                 id="locname" onChange={(e) => {setLN(e.target.value);}}
               />
+              <div id="passwordhelp" class="form-text">
+                Longtitude and Latitude will be retrieved directly from API. 
+              </div>
             </div>
-            {/* <div class="mb-3">
-              <label for="locLat" class="form-label">
-                Latitude
-              </label>
-              <input
-                type="float"
-                class="form-control"
-                id="locLac"
-                aria-describedby="locLachelp" onChange={(e) => {setLat(e.target.value);}}
-              />
-              <div id="locLachelp" class="form-text">
-                Leave blank if delete or retrive location.
-              </div>
-            </div> */}
-            {/* <div class="mb-3">
-              <label for="locLong" class="form-label">
-                Longtitude
-              </label>
-              <input
-                type="float"
-                class="form-control"
-                id="locLong"
-                aria-describedby="locLonghelp" onChange={(e) => {setLong(e.target.value);}}
-              />
-              <div id="locLonghelp" class="form-text">
-                Leave blank if delete or retrive location.
-              </div>
-            </div> */}
             <div class="row gx-2">
               <button type="submit" className="btn btn-outline-secondary">Submit</button>
             </div>
