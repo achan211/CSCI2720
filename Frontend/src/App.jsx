@@ -89,7 +89,6 @@ function NoMatch() {
   );
 }
 
-// TO DO: User Update
 function Admin_page() {
   const [locData, setlocData] = useState([]);
   const [userData, setuserData] = useState([]);
@@ -219,7 +218,11 @@ function Admin_page() {
             body: bodytext})
           .then(res => res.json())
           .then(data => {
-            alert("User update success!");
+            if (data.ok) {
+              alert("User update success!");
+            } else {
+              alert("Something is wrong...");
+            }
           })
           break;
         case "d":
@@ -517,7 +520,7 @@ function Location_details() {
           </div>
 
           <div class="col-auto align-self-end">
-            <button class="btn btn-primary d-inline-flex justify-content-center align-content-between">
+            <button class="btn btn-primary d-inline-flex justify-content-center align-content-between" onClick={(e) => {console.log("Refreshed"); fetchDetails()}}>
               <span class="material-icons">refresh</span>
               <span>&nbsp;Refresh</span>
             </button>
@@ -915,84 +918,97 @@ class Login extends React.Component {
 }
 
 // Check Check if any error
-class CreateAccount extends React.Component {
-  handleConfirm() {
-    {
-      /*----------confirm pwd match and enable the button----------*/
-    }
-    {
-      /*ref: https://stackoverflow.com/questions/21727317/how-to-check-confirm-password-field-in-form-without-reloading-page */
-    }
+function CreateAccount() {
+  const [username, setU] = useState("")
+  const [pwd, setP] = useState("")
+
+  function handlePasswordCheck() {
     let msg = document.getElementById("msg");
-    if (
-      document.getElementById("pwd").value !=
-      document.getElementById("confirmpwd").value
-    ) {
-      msg.style.color = "red";
-      msg.innerHTML = " * Password must Match the previous entry.";
-      document.getElementById("btn").disabled = true;
-    } else {
-      msg.style.color = "green";
-      msg.innerHTML = " Password match";
-      document.getElementById("btn").disabled = false;
+    if (document.getElementById("pwd").value != "") {
+      if (
+        document.getElementById("pwd").value !=
+        document.getElementById("confirmpwd").value
+      ) {
+        msg.style.color = "red";
+        msg.innerHTML = " * Password must Match the previous entry.";
+        document.getElementById("btn").disabled = true;
+      } else {
+        msg.style.color = "green";
+        msg.innerHTML = " Password match";
+        document.getElementById("submit").disabled = false;
+      }
     }
   }
-  render() {
-    return (
-      <>
-        <br />
-        <br />
-        <form action="/createaccount" class="container px-1 " method="POST">
-          {/*----------!!!!!todo form action----------*/}
-          <div class="text-center">
-            <h2>Sign Up</h2>
-          </div>
-          <br />
-          <div class="mb-3 row justify-content-center">
-            <div class="col-sm-5">
-              <input
-                type="text"
-                class="form-control"
-                id="username"
-                placeholder="username"
-              />
-            </div>
-          </div>
-          <div class="mb-3 row justify-content-center">
-            <div class="col-sm-5">
-              <input
-                type="password"
-                class="form-control"
-                id="pwd"
-                placeholder="password"
-              />
-            </div>
-          </div>
-          <div class="mb-3 row justify-content-center">
-            <div class="col-sm-5">
-              <input
-                type="password"
-                class="form-control"
-                id="confirmpwd"
-                placeholder="confirm password"
-                onKeyUp={() => this.handleConfirm()}
-              />
-              <span id="msg"></span>
-            </div>
-            {/*----------confirm password done in function handleConfirm()----------*/}
-          </div>
-          <div class="text-center">
-            <button id="btn" type="button" class="btn btn-dark" disabled>
-              Signup
-            </button>
-          </div>
-          <div class="text-center">
-            <LongLink to="/login" label="Already have an account? Sign In" />
-          </div>
-        </form>
-      </>
-    );
+
+  const handleReg = (e) => {
+    e.preventDefault()
+    let bodytext = "username=" + username + "&pwd=" + pwd;
+    console.log(bodytext)
+    fetch("/user", {
+      method: "POST", 
+      headers: {"Content-Type": "application/x-www-form-urlencoded"},
+      body: bodytext})
+    .then(data => {
+      console.log(data);
+      if (data.ok) {
+        alert("User " + username + " is created! Please check!");
+      } else {
+        alert("Opps! Username " + username + " has been taken. Please use another username.")
+      }
+    })
   }
+  return (
+    <>
+      <br />
+      <br />
+      <form onSubmit={(e) => handleReg(e)} onChange={() => handlePasswordCheck()} class="container px-1 " method="POST">
+        <div class="text-center">
+          <h2>Sign Up</h2>
+        </div>
+        <br />
+        <div class="mb-3 row justify-content-center">
+          <div class="col-sm-5">
+            <input
+              type="text"
+              class="form-control"
+              id="username"
+              placeholder="username" onChange={(e) => setU(e.target.value)}
+            />
+          </div>
+        </div>
+        <div class="mb-3 row justify-content-center">
+          <div class="col-sm-5">
+            <input
+              type="password"
+              class="form-control"
+              id="pwd"
+              placeholder="password" onChange={(e) => setP(e.target.value)}
+            />
+          </div>
+        </div>
+        <div class="mb-3 row justify-content-center">
+          <div class="col-sm-5">
+            <input
+              type="password"
+              class="form-control"
+              id="confirmpwd"
+              placeholder="confirm password"
+            />
+            <span id="msg"></span>
+          </div>
+          {/*----------confirm password done in function handleConfirm()----------*/}
+        </div>
+        <div class="text-center">
+          <button id="submit" type="submit" class="btn btn-dark" disabled>
+            Signup
+          </button>
+        </div>
+        <div class="text-center">
+          <LongLink to="/login" label="Already have an account? Sign In" />
+        </div>
+      </form>
+    </>
+  );
 }
 
 ReactDOM.render(
