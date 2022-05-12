@@ -1,5 +1,6 @@
 import ReactDOM from "react-dom";
 import "./App.css";
+<<<<<<< HEAD
 import MapContainer from"./Map.jsx";
 
 import React, { 
@@ -7,6 +8,10 @@ import React, {
   useState 
 } from "react";
 
+=======
+import React, { useEffect} from "react";
+import { useState } from "react";
+>>>>>>> 65746428a7697af4554e663231113f6d5fb6f8b8
 import {
   BrowserRouter,
   Routes,
@@ -17,6 +22,9 @@ import {
   useLocation,
   useNavigate,
 } from "react-router-dom";
+import Cookies from 'universal-cookie'
+const cookies = new Cookies();
+
 
 
 function App() {
@@ -48,15 +56,14 @@ function App() {
                 {" "}
                 &nbsp;Weathering With Me
               </span>
-              <NavList />
+                <NavList />
             </div>
-            <Logout username="Admin" />
-            {/*----------todo:username----------*/}
+            <Logout />
           </nav>
 
           <Routes>
-            <Route path="/login" element={<Login />} />
-            <Route path="/" element={<Home />} />
+            <Route path="/" element={<Login />} />
+            <Route path="/home" element={<Home />} />
             <Route path="/favloc" element={<FavLoc />} />
             <Route path="/createaccount" element={<CreateAccount />} />
             <Route path="/location/:loc" element={<Location_details />} />
@@ -386,7 +393,7 @@ function Location_details() {
 
 
   let locName = details.Name
-  let username = "Alvin"
+  let username = cookies.get('name');
   let loc = useParams().loc;
 
   const fetchDetails = () => {
@@ -525,12 +532,14 @@ function Location_details() {
             </p>
           </div>
 
+          {username == "admin" && <>
           <div class="col-auto align-self-end">
             <button class="btn btn-primary d-inline-flex justify-content-center align-content-between" onClick={(e) => {console.log("Refreshed"); fetchDetails()}}>
               <span class="material-icons">refresh</span>
               <span>&nbsp;Refresh</span>
             </button>
           </div>
+          </>}
 
         </div>
       </div>
@@ -558,74 +567,63 @@ function Location_details() {
   );
 }
 
-// TO DO: For non-user?
-class NavList extends React.Component {
-  render() {
-    // a stub for detemining if the user is admin (todo: get from session if the user is admin)
-    let isAdmin = 1,
-      isUser = 0,
-      isNonUser = 0;
-    {
-      /*Set to 1 For testing diff user(!!!!!todo)*/
-    }
+function NavList (){
+  const navigate = useNavigate();
+  const [name, setName] = useState(0);
+  const [login, setLogin] = useState(0);
+  useEffect(() => {
+    setTimeout(() => {
+      setName(cookies.get('name'));
+      setLogin(cookies.get('loggined'));
+      navigate(). refresh();
+    }, 10);
+    
+  });
 
-    if (isAdmin == 1)
+  if(login=="true")
       return (
-        <>
-          {/*----------NavList for admin----------*/}
+          <>
           <p>&nbsp;</p>
-          <span class="material-icons" style={{ color: "#484848" }}>
+          <span class="material-icons" styley={{ color: "#484848" }}>
             &#xE88A;
           </span>
-          <LongLink to="/" label="Home" />
-
-          <p>&nbsp;&nbsp;&nbsp;&nbsp;</p>
-          <span class="material-icons" style={{ color: "#484848" }}>
-            &#xE87D;
-          </span>
-          <LongLink to="/favloc" label="My Favourite Locations" />
-
-          <p>&nbsp;&nbsp;&nbsp;&nbsp;</p>
-          <span class="material-icons" style={{ color: "#484848" }}>
-            &#xE8B8;
-          </span>
-          <LongLink to="/admin" label="Admin Page" />
-        </>
-      );
-    else if (isUser == 1)
-      return (
-        <>
-          {/*-----------NavList for user----------*/}
-          <p>&nbsp;</p>
-          <span class="material-icons" style={{ color: "#484848" }}>
-            &#xE88A;
-          </span>
-          <LongLink to="/" label="Home" />
+          <LongLink to="/home" label="Home" />
 
           <p>&nbsp;&nbsp;&nbsp;&nbsp;</p>
           <span class="material-icons" style={{ color: "#484848" }}>
             &#xE87D;
           </span>
           <LongLink to="/favloc" label="My favourite location" />
-        </>
-      );
-    else if (isNonUser == 1) return (
-      "Hello World"
-    );
+          {name=="admin"&&(
+                      <>
+          <p>&nbsp;&nbsp;&nbsp;&nbsp;</p>
+          <span class="material-icons" style={{ color: "#484848" }}>
+            &#xE8B8;
+          </span>
+          <LongLink to="/admin" label="Admin Page" />
+          </>
+          )}
+          </>
+      ); 
   }
-}
 
-// Not working!!
-class Logout extends React.Component {
-  // a stub for detemining if the user is admin (todo: get from session if the user is admin)
 
-  render() {
-    let isAdmin = 0,
-      isUser = 1,
-      isNonUser = 0; //Set to 1 For testing diff user(!!!!!todo)
+function Logout () {
+  const navigate = useNavigate();
+  
+  function handleLogout(e){
+    cookies.set('loggined', "false", 
+    { path: '/',secure: true,sameSite :true}
+    );
+    navigate("/");
+  }
+    let isLogin=0;
+    let username=cookies.get('name');
+    if(cookies.get('loggined')== "true") isLogin = 1; else isLogin=0; 
+
     return (
       <>
-        {isNonUser != 1 && (
+        {isLogin == 1 && (
           <li style={{ listStyleType: "none" }} class="nav-item dropdown">
             {/*dropdown for logout*/}
 
@@ -641,7 +639,7 @@ class Logout extends React.Component {
                 <i style={{ color: "#484848" }} class="material-icons">
                   &#xE853;
                 </i>
-                Hi, {this.props.username}!&nbsp;&nbsp;&nbsp;
+                Hi, {username}!&nbsp;&nbsp;&nbsp;
               </span>
             </a>
 
@@ -650,13 +648,12 @@ class Logout extends React.Component {
               class="dropdown-menu dropdown-menu-dark"
               aria-labelledby="navbarDarkDropdownMenuLink"
             >
-              <LongLink to="/login" label="&nbsp;&nbsp; &nbsp;&nbsp;Logout" />
+              <p style={{ color: "#484848", fontSize: "20px", cursor:"pointer" }} onClick={(e) => handleLogout(e)}>&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;Logout</p>
             </ul>
           </li>
         )}
       </>
     );
-  }
 }
 
 // TO DO: Map icon to each location view!
@@ -790,8 +787,9 @@ function FavTable() {
     navigate(link);
   };
   const [data, setData] = useState([]);
+  let username=cookies.get('name');
   React.useEffect(() => {
-    fetch("/favourite/Alvin")
+    fetch("/favourite/"+username)
       .then((res) => res.json())
       .then((text) => {
         for (let index = 0; index < text.length; index++) {
@@ -854,14 +852,33 @@ function FavLoc () {
   );
 }
 
-// TO DO: Not yet implemented!
-class Login extends React.Component {
-  render() {
+
+function Login() {
+
+  const navigate = useNavigate();
+
+  function handlelogin(e){
+    e.preventDefault();
+    let username=e.target[0].value;
+    let pwd=e.target[1].value;
+    let bodytext = "username=" + username + "&pwd=" + pwd
+    fetch("http://localhost:4000/login", {
+        method: "POST",
+        headers: {"Content-Type": "application/x-www-form-urlencoded"}, 
+        body: bodytext})
+    .then(res => res.text())
+    .then(()=>{
+      if(cookies.get('loggined')== "true")
+          navigate('/home');
+
+        }) 
+  }
+
     return (
       <>
         <br />
         <br />
-        <form action="" class="container px-1 " method="POST">
+        <form onSubmit={(e) => handlelogin(e)} class="container px-1 " method="POST">
           {/*----------!!!!!todo form action ----------*/}
           <div class="text-center">
             {/*login.png by flaticon*/}
@@ -878,6 +895,7 @@ class Login extends React.Component {
                 type="text"
                 class="form-control"
                 id="username"
+                name="username"
                 placeholder="username"
               />
             </div>
@@ -887,13 +905,14 @@ class Login extends React.Component {
               <input
                 type="password"
                 class="form-control"
-                id="password"
+                id="pwd"
+                name="pwd"
                 placeholder="password"
               />
             </div>
           </div>
           <div class="text-center">
-            <button type="button" class="btn btn-dark">
+            <button type="submit" class="btn btn-dark">
               Login
             </button>
             <div>
@@ -907,7 +926,7 @@ class Login extends React.Component {
       </>
     );
   }
-}
+
 
 // Check Check if any error
 function CreateAccount() {
@@ -942,11 +961,7 @@ function CreateAccount() {
       body: bodytext})
     .then(data => {
       console.log(data);
-      if (data.ok) {
-        alert("User " + username + " is created! Please check!");
-      } else {
-        alert("Opps! Username " + username + " has been taken. Please use another username.")
-      }
+      alert(data);
     })
   }
   return (
@@ -996,7 +1011,7 @@ function CreateAccount() {
           </button>
         </div>
         <div class="text-center">
-          <LongLink to="/login" label="Already have an account? Sign In" />
+          <LongLink to="/" label="Already have an account? Sign In" />
         </div>
       </form>
     </>
