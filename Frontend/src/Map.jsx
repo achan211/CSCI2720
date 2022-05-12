@@ -1,5 +1,7 @@
 import React from 'react';
 
+import {Link} from 'react-router-dom';
+
 import { 
 Map, 
 Marker,
@@ -31,7 +33,8 @@ export class MapContainer extends React.Component {
       selectedPlace: props,
       activeMarker: marker,
       showingInfoWindow: true
-    })};
+    })
+    };
 
   onInfoWindowClose = () => {
     this.setState({
@@ -69,7 +72,9 @@ export class MapContainer extends React.Component {
               visible={this.state.showingInfoWindow}
             >
               <div>
-                <h4>{this.state.selectedPlace.title}</h4>
+                {/* <h5 component={Link} to={"/location/" + this.state.selectedPlace.title}>{this.state.selectedPlace.title}</h5> */}
+                {/* <Link to={"/location/" + this.state.selectedPlace.title}><h5>{this.state.selectedPlace.title}</h5></Link> */}
+                <h5>{this.state.selectedPlace.title}</h5>
               </div>
             </InfoWindow>
           </Map>

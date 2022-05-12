@@ -1,17 +1,11 @@
 import ReactDOM from "react-dom";
 import "./App.css";
-<<<<<<< HEAD
 import MapContainer from"./Map.jsx";
 
 import React, { 
   useEffect, 
   useState 
 } from "react";
-
-=======
-import React, { useEffect} from "react";
-import { useState } from "react";
->>>>>>> 65746428a7697af4554e663231113f6d5fb6f8b8
 import {
   BrowserRouter,
   Routes,
@@ -24,8 +18,6 @@ import {
 } from "react-router-dom";
 import Cookies from 'universal-cookie'
 const cookies = new Cookies();
-
-
 
 function App() {
   const [data, setData] = useState(null);
@@ -224,13 +216,13 @@ function Admin_page() {
           }
           break;
         case "u":
-          let bodytext = "username=" + userName + "&pwd=" + pwd + "&newusername=" + newUserName + "&newpassword=" + newPwd
+          let bodytext = "username=" + userName + "&newusername=" + newUserName + "&newpassword=" + newPwd
           fetch("/user", {
             method: "PUT", 
             headers: {"Content-Type": "application/x-www-form-urlencoded"},
             body: bodytext})
-          .then(res => res.json())
           .then(data => {
+            console.log(data);
             if (data.ok) {
               alert("User update success!");
             } else {
@@ -287,7 +279,7 @@ function Admin_page() {
               <input type="text" class="form-control" onChange={(e) => {setNU(e.target.value)}} />
             </div>
             </>: ""}
-            {userAction == "c" || userAction == "u" ? <>
+            {userAction == "c" ? <>
             <div class="mb-3">
               <label for="Password" class="form-label">
                 Password

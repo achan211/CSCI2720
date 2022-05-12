@@ -488,8 +488,6 @@ db.once("open", function () {
 
   // Admin Update User Data - DONE!
    app.put("/user", (req, res) => {
-
-
     bcrypt.genSalt(10, (err, salt) => {
      
       bcrypt.hash(req.body["newpassword"], salt, (err, hash) => {
@@ -504,11 +502,14 @@ db.once("open", function () {
         );
         query.exec().then(
           (results) => {
-            if (results == null) res.send("There is no user available");
-            else {
+            if (results != null) {
               res.contentType("text/plain");
+              res.status(200);
               var event = JSON.stringify(results, null, "\t");
               res.send(event);
+            } else {
+              res.status(404);
+              res.send("Opps...")
             }
           },
           (error) => {
