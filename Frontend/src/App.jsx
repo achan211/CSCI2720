@@ -553,7 +553,7 @@ function Location_details() {
       </div>
 
       <div className="d-flex justify-content-center">
-          <button type="button" className="btn btn-outline-secondary" onClick={() => navigate('/')}>Back to Homepage</button>
+          <button type="button" className="btn btn-outline-secondary" onClick={() => navigate('/home')}>Back to Homepage</button>
       </div>
     </div>
   );
@@ -602,7 +602,6 @@ function NavList (){
 
 function Logout () {
   const navigate = useNavigate();
-  
   function handleLogout(e){
     cookies.set('loggined', "false", 
     { path: '/',secure: true,sameSite :true}
@@ -760,7 +759,7 @@ function Datatable({ fData }) {
         </thead>
         <tbody>
           {fData.map((row) => (
-            <tr onClick={() => handleRowClick("/location/" + row.locName)}>
+            <tr style={{cursor:"pointer"}} onClick={() => handleRowClick("/location/" + row.locName)}>
               {columns.map((column) => (
                 <td>{row[column]}</td>
               ))}
@@ -797,7 +796,7 @@ function FavTable() {
   }, []);
 
   var listItems = data.map((data) => (
-    <tr onClick={() => handleRowClick("/location/" + data.locName)}>
+    <tr style={{cursor:"pointer"}} onClick={() => handleRowClick("/location/" + data.locName)}>
       <th scope="row">{data.num}</th>
       <td>{data.locName}</td>
       <td>{data.locLat}</td>
@@ -837,7 +836,7 @@ function FavLoc () {
         </div>
         <FavTable />
         <div className="d-flex justify-content-center">
-          <button type="button" className="btn btn-outline-secondary" onClick={() => navigate('/')}>Back to Homepage</button>
+          <button type="button" className="btn btn-outline-secondary" onClick={() => navigate('/home')}>Back to Homepage</button>
         </div>
       </div>
     </>
@@ -859,13 +858,17 @@ function Login() {
         headers: {"Content-Type": "application/x-www-form-urlencoded"}, 
         body: bodytext})
     .then(res => res.text())
-    .then(()=>{
+    .then(()=> {
       if(cookies.get('loggined')== "true")
-          navigate('/home');
-
+        navigate('/home');
+      else 
+        alert("Incorrect password or username!");
         }) 
   }
 
+  if (cookies.get('loggined')== "true")
+    return <Home/>;
+  else
     return (
       <>
         <br />
