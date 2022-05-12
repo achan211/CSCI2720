@@ -1,7 +1,12 @@
 import ReactDOM from "react-dom";
 import "./App.css";
-import React, { useEffect } from "react";
-import { useState } from "react";
+import MapContainer from"./Map.jsx";
+
+import React, { 
+  useEffect, 
+  useState 
+} from "react";
+
 import {
   BrowserRouter,
   Routes,
@@ -12,6 +17,7 @@ import {
   useLocation,
   useNavigate,
 } from "react-router-dom";
+
 
 function App() {
   const [data, setData] = useState(null);
@@ -735,25 +741,11 @@ function Home() {
             </div>
             <Datatable fData={search(data)} />
           </div>
-          <div class="col-5">
-            <div class="mapouter">
-              <div class="gmap_canvas">
-                {/*----------Use this link to generate the src https://google-map-generator.com/ ---------- */}
-                <iframe
-                  width="300"
-                  height="300"
-                  id="gmap_canvas"
-                  src={
-                    "https://maps.google.com/maps?q=2880%20Broadway,%20New%20York&t=&z=13&ie=UTF8&iwloc=&output=embed"
-                  }
-                  frameborder="0"
-                  scrolling="no"
-                  marginheight="0"
-                  marginwidth="0"
-                ></iframe>
-              </div>
-            </div>
+
+          <div class="col">
+            <MapContainer loc={search(data)}/>
           </div>
+
         </div>
       </div>
     </>
