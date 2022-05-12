@@ -191,15 +191,23 @@ function Admin_page() {
           if (userName === "" || pwd === "") {
             alert("Missing information.")
           } else {
-            let bodytext = "username=" + userName + "&pwd=" + pwd
+            if (userName.length < 4 || userName.length > 20) {
+              alert("Username should be 4 to 20 characters.")
+            } else {
+              if (pwd.length < 4 || pwd.length > 20) {
+                alert("Password should be 4 to 20 characters.")
+              } else {
+                let bodytext = "username=" + userName + "&pwd=" + pwd
 
-            fetch("/user", {
-                method: "POST", 
-                headers: {"Content-Type": "application/x-www-form-urlencoded"},
-                body: bodytext})
-            .then(res => res.text())
-            .then(data => console.log(data))
-            alert("User is created! Please check!")
+                fetch("/user", {
+                    method: "POST", 
+                    headers: {"Content-Type": "application/x-www-form-urlencoded"},
+                    body: bodytext})
+                .then(res => res.text())
+                .then(data => console.log(data))
+                alert("User is created! Please check!")
+              }
+            }
           }
           break;
         case "r":
