@@ -521,12 +521,14 @@ function Location_details() {
             </p>
           </div>
 
+          {username == "admin" && <>
           <div class="col-auto align-self-end">
             <button class="btn btn-primary d-inline-flex justify-content-center align-content-between" onClick={(e) => {console.log("Refreshed"); fetchDetails()}}>
               <span class="material-icons">refresh</span>
               <span>&nbsp;Refresh</span>
             </button>
           </div>
+          </>}
 
         </div>
       </div>
@@ -554,15 +556,8 @@ function Location_details() {
   );
 }
 
-//not working!!!!!!
 function NavList (){
-  /*cookies.set('loggined', "true", 
-    { path: '/',secure: true,sameSite :true}
-    );
-  cookies.set('name', "admin", 
-    { path: '/',secure: true,sameSite :true}
-    );*/
-    const navigate = useNavigate();
+  const navigate = useNavigate();
   const [name, setName] = useState(0);
   const [login, setLogin] = useState(0);
   useEffect(() => {
