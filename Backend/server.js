@@ -487,28 +487,40 @@ db.once("open", function () {
   });
 
   // Admin Update User Data - DONE!
-  app.put("/user", (req, res) => {
-    var query = User.findOneAndUpdate(
-      { username: req.body["username"], pwd: req.body["pwd"] },
-      {
-        username: req.body["newusername"],
-        pwd: req.body["newpassword"],
-      }
-    );
-    query.exec().then(
-      (results) => {
-        if (results == null) res.send("There is no user available");
-        else {
-          res.contentType("text/plain");
-          var event = JSON.stringify(results, null, "\t");
-          res.send(event);
-        }
-      },
-      (error) => {
-        res.contentType("text/plain");
-        res.send(error);
-      }
-    );
+   app.put("/user", (req, res) => {
+
+
+    bcrypt.genSalt(10, (err, salt) => {
+     
+      bcrypt.hash(req.body["newpassword"], salt, (err, hash) => {
+        if (err) throw err;
+        req.body["newpassword"] = hash;
+        var query = User.findOneAndUpdate(
+          { username: req.body["username"]},
+          {
+            username: req.body["newusername"],
+            pwd: req.body["newpassword"],
+          }
+        );
+        query.exec().then(
+          (results) => {
+            if (results == null) res.send("There is no user available");
+            else {
+              res.contentType("text/plain");
+              var event = JSON.stringify(results, null, "\t");
+              res.send(event);
+            }
+          },
+          (error) => {
+            res.contentType("text/plain");
+            res.send(error);
+          }
+        );
+      });
+    });
+
+    
+    
   });
 
   // Admin delete User-->DONE
