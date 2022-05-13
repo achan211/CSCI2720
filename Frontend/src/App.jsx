@@ -504,8 +504,8 @@ function Location_details() {
          <div class="col-auto">
           <h1>{details.Name}</h1>
           <span>
-            {Math.abs(details.Latitude)}&deg;{details.Latitude > 0 ? "N" : "S"}{" "}
-            {Math.abs(details.Longitude)}&deg;{details.Longitude > 0 ? "E" : "W"}&nbsp;
+            {Math.abs(details.Latitude)}{'\u00b0'}{details.Latitude > 0 ? "N" : "S"}{" "}
+            {Math.abs(details.Longitude)}{'\u00b0'}{details.Longitude > 0 ? "E" : "W"}&nbsp;
           </span>
          </div>
           
