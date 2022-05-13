@@ -12,7 +12,7 @@ Step 4: Execute `npm start` in backend
 Step 5: Go to `localhost:4000` and check!  
 
 
-#Deploy in AWS instance with port 80
+# Deploy in AWS instance with port 80
 
 Step 1: Have your AWS instance
 
