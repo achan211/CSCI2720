@@ -254,7 +254,17 @@ function Admin_page() {
   };
 
   const columns = userData[0] && Object.keys(userData[0]);
-
+  const navigate = useNavigate();
+  if (cookies.get('loggined')!= "true")
+  return (
+  <><br/><br/><br/><br/>
+  <div className="d-flex justify-content-center">
+  
+    <h1>Please Log in and try again.</h1>
+  <button type="button" className="btn btn-outline-secondary" onClick={() => navigate('/')}>Back to login</button>
+  </div>
+  </>)
+  else
   return (
     <div class="container mt-3">
       <br />
@@ -478,6 +488,16 @@ function Location_details() {
       <p>{row.comment}</p>
     </div>
   ));
+  if (cookies.get('loggined')!= "true")
+  return (
+  <><br/><br/><br/><br/>
+  <div className="d-flex justify-content-center">
+  
+    <h1>Please Log in and try again.</h1>
+  <button type="button" className="btn btn-outline-secondary" onClick={() => navigate('/')}>Back to login</button>
+  </div>
+  </>)
+  else
   return (
     <div class="container mt-3 mb-3">
       <div class="container m-0 pt-3 pb-4">
@@ -695,7 +715,17 @@ function Home() {
     }
     return sortRows;
   }
-
+  const navigate = useNavigate();
+  if (cookies.get('loggined')!= "true")
+  return (
+  <><br/><br/><br/><br/>
+  <div className="d-flex justify-content-center">
+  
+    <h1>Please Log in and try again.</h1>
+  <button type="button" className="btn btn-outline-secondary" onClick={() => navigate('/')}>Back to login</button>
+  </div>
+  </>)
+  else
   return (
     <>
       <div class="container">
@@ -811,7 +841,7 @@ function FavTable() {
       <td>{data.locLong}</td>
     </tr>
   ));
-
+    
   return (
     <>
       {listItems.length == 0 ? <p className="lead">Opps! You've no favourite locations. Maybe starting adding some!</p> : 
@@ -835,6 +865,16 @@ function FavTable() {
 
 function FavLoc () {
   const navigate = useNavigate();
+  if (cookies.get('loggined')!= "true")
+  return (
+  <><br/><br/><br/><br/>
+  <div className="d-flex justify-content-center">
+    
+    <h1>Please Log in and try again.</h1>
+  <button type="button" className="btn btn-outline-secondary" onClick={() => navigate('/')}>Back to login</button>
+  </div>
+  </>)
+  else
   return (
     <>
       <div class="container">
@@ -874,10 +914,9 @@ function Login() {
         }) 
   }
 
-  if (cookies.get('loggined')== "true"){
-    alert("You are already logged in!")
-    return <Home/>;
-  }
+  if (cookies.get('loggined')== "true")
+    return (<><br/><br/><br/><br/>
+    <div className="d-flex justify-content-center"><h1>You are already logged in!</h1></div></>);
   else
     return (
       <>
@@ -980,11 +1019,11 @@ function CreateAccount() {
       }
     }
   }
-  
-  if (cookies.get('loggined')== "true"){
-    alert("You need to log out before creating an account.");
-    return <Home/>;
-  }else
+
+  if (cookies.get('loggined')== "true")
+    return (<><br/><br/><br/><br/>
+    <div className="d-flex justify-content-center"><h1>You need to log out before creating an account.</h1></div></>);
+  else
   return (
     <>
       <br />
