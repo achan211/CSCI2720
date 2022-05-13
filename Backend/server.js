@@ -28,7 +28,7 @@ db.once("open", function () {
     username: { type: String, required: true, unique: true },
     pwd: { type: String, required: true },
     admin: { type: Boolean, required: true },
-    favourite: [{ type: mongoose.Schema.Types.ObjectId, ref: "Location" }],
+    favourite: [{ type: mongoose.Schema.Types.ObjectId, ref: "Loc" }],
   });
 
   const LocationSchema = mongoose.Schema({
@@ -39,12 +39,12 @@ db.once("open", function () {
 
   const CommentSchema = mongoose.Schema({
     user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-    loc: { type: mongoose.Schema.Types.ObjectId, ref: "Location" },
+    loc: { type: mongoose.Schema.Types.ObjectId, ref: "Loc" },
     comment: { type: String },
   });
 
   const User = mongoose.model("User", UserSchema);
-  const Location = mongoose.model("Loc", LocationSchema);
+  const Loc = mongoose.model("Loc", LocationSchema);
   const Comment = mongoose.model("Comment", CommentSchema);
 
   app.get("/example", (req, res) => {
@@ -60,7 +60,7 @@ db.once("open", function () {
     // query in the form /loc?keyword=Hong-Kong
     var keyword = req.query["keyword"];
     // res.send(keyword)
-    Location.find(
+    Loc.find(
       { locName: { $regex: keyword } },
       "-_id locName locLat locLong"
     )
@@ -117,7 +117,7 @@ db.once("open", function () {
         return user_id;
       })
       .then(() => {
-        Location.findOne({ locName: req.body["locName"] }, "_id")
+        Loc.findOne({ locName: req.body["locName"] }, "_id")
           .exec()
           .then((r) => {
             loc_id = r._id;
@@ -158,7 +158,7 @@ db.once("open", function () {
   // See Comment based on Location - DONE!
   app.get("/comment/:locName", (req, res) => {
     var loc_id;
-    Location.findOne({ locName: req.params["locName"] }, "_id")
+    Loc.findOne({ locName: req.params["locName"] }, "_id")
       .exec()
       .then((r) => {
         if (r != null) loc_id = r._id;
@@ -189,7 +189,7 @@ db.once("open", function () {
   // Select a location, then add favourite - DONE!
   app.put("/favourite/:username/:locName", (req, res) => {
     var loc_id;
-    Location.findOne({ locName: req.body["locName"] }, "_id")
+    Loc.findOne({ locName: req.body["locName"] }, "_id")
       .exec()
       .then((r) => {
         loc_id = r._id;
@@ -232,7 +232,7 @@ db.once("open", function () {
         if (text.error) {
           res.status(404).send("Location does not exist");
         } else {
-          Location.create({
+          Loc.create({
             locName: text.location.name,
             locLat: text.location.lat,
             locLong: text.location.lon,
@@ -284,7 +284,7 @@ db.once("open", function () {
 
   //retireve all Location name
   app.get("/location", (req, res) => {
-    var query = Location.find();
+    var query = Loc.find();
     query.select("-_id locName locLat locLong");
     query.exec().then(
       (results) => {
@@ -307,7 +307,7 @@ db.once("open", function () {
   // use form submit to pass the searching location
   app.get("/searchLoc", (req, res) => {
     var search = req.query["search"];
-    var query = Location.find({ locName: { $regex: new RegExp(search,"i") } });
+    var query = Loc.find({ locName: { $regex: new RegExp(search,"i") } });
     query.select("-_id locName locLat locLong");
     query.exec().then(
       (results) => {
@@ -337,7 +337,7 @@ db.once("open", function () {
         if (text.error) {
           res.status(404).send("Location does not exist");
         } else {
-          Location.findOneAndUpdate(
+          Loc.findOneAndUpdate(
             { locName: req.params["locat"] },
             {
               locName: text.location.name,
@@ -382,7 +382,7 @@ db.once("open", function () {
             .status(404)
             .send("This location is not existed.\n404 Not Found\n");
         } else {
-          Location.deleteOne({ _id: results._id }).then(
+          Loc.deleteOne({ _id: results._id }).then(
             function () {
               res.status(204).send("204 No Content");
             },
