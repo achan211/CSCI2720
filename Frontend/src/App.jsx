@@ -631,7 +631,7 @@ function Logout () {
   const navigate = useNavigate();
   function handleLogout(e){
     cookies.set('loggined', "false", 
-    { path: '/',secure: true,sameSite :true}
+    { path: '/'}
     );
     navigate("/");
   }
