@@ -22,9 +22,10 @@ Step 3: install pm2 package globally
 
         npm install pm2 -g
         
-Step 4: Redirect port 80 to port 3000 
+Step 4: Redirect port 80 to port 3000 command 
 
-        with command "sudo iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 80 -j REDIRECT --to-port 3000"
+        sudo iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 80 -j REDIRECT --to-port 3000
+        
         
         (https://stackoverflow.com/questions/16573668/best-practices-when-running-node-js-with-port-80-ubuntu-linode)
         
