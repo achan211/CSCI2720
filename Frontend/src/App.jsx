@@ -445,7 +445,7 @@ function Location_details() {
     // Updating Server
     let bodytext = "username=" + username + "&locName=" + locName + "&comment=" + nc
 
-    fetch("http://localhost:4000/newComment", {
+    fetch("/newComment", {
          method: "POST", 
          headers: {"Content-Type": "application/x-www-form-urlencoded"},
          body: bodytext})
@@ -898,7 +898,7 @@ function Login() {
     let username=e.target[0].value;
     let pwd=e.target[1].value;
     let bodytext = "username=" + username + "&pwd=" + pwd
-    fetch("http://localhost:4000/login", {
+    fetch("/login", {
         method: "POST",
         headers: {"Content-Type": "application/x-www-form-urlencoded"}, 
         body: bodytext})

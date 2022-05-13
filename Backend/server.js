@@ -44,7 +44,7 @@ db.once("open", function () {
   });
 
   const User = mongoose.model("User", UserSchema);
-  const Location = mongoose.model("Location", LocationSchema);
+  const Location = mongoose.model("Loc", LocationSchema);
   const Comment = mongoose.model("Comment", CommentSchema);
 
   app.get("/example", (req, res) => {
