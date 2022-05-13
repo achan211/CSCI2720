@@ -874,8 +874,10 @@ function Login() {
         }) 
   }
 
-  if (cookies.get('loggined')== "true")
+  if (cookies.get('loggined')== "true"){
+    alert("You are already logged in!")
     return <Home/>;
+  }
   else
     return (
       <>
@@ -979,9 +981,10 @@ function CreateAccount() {
     }
   }
   
-  if (cookies.get('loggined')== "true")
+  if (cookies.get('loggined')== "true"){
+    alert("You need to log out before creating an account.");
     return <Home/>;
-  else
+  }else
   return (
     <>
       <br />
