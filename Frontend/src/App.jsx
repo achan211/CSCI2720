@@ -539,7 +539,7 @@ function Location_details() {
         <div class="row">
         <div class="col-auto p-0"></div>
           <div class="col-auto me-auto">
-            <h2>Current Temperature: {details.Temperature}°C</h2>
+            <h2>Current Temperature: {details.Temperature}&deg;C</h2>
             <p class="m-0">
               Wind speed: {details.Wind_speed}kph {details.Wind_direction}
               <br />
@@ -890,7 +890,6 @@ function FavLoc () {
 
 
 function Login() {
-
   const navigate = useNavigate();
 
   function handlelogin(e){
