@@ -71,7 +71,7 @@ function App() {
 function LongLink({ label, to }) {
   let match = useMatch({ path: to });
   return (
-    <li style={{ listStyleType: "none" }}>
+    <li style={{ listStyleType: "none", display:"inline" }}>
       {match && " "}
       <Link
         style={{ color: "#484848", textDecoration: "none", fontSize: "20px" }}
@@ -603,23 +603,23 @@ function NavList (){
       return (
           <>
           <p>&nbsp;</p>
-          <span class="material-icons" styley={{ color: "#484848" }}>
-            &#xE88A;
+          <span class="material-icons" styley={{ color: "#484848",display:"inline" }}>
+            &nbsp;&nbsp;&nbsp;&nbsp;&#xE88A;
           </span>
           <LongLink to="/home" label="Home" />
-
-          <p>&nbsp;&nbsp;&nbsp;&nbsp;</p>
-          <span class="material-icons" style={{ color: "#484848" }}>
-            &#xE87D;
+          <p>&nbsp;</p>
+          <span class="material-icons" style={{ color: "#484848",display:"inline" }}>
+            &nbsp;&nbsp;&nbsp;&nbsp;&#xE87D;
           </span>
           <LongLink to="/favloc" label="My favourite location" />
+          <p>&nbsp;</p>
           {name=="admin"&&(
                       <>
-          <p>&nbsp;&nbsp;&nbsp;&nbsp;</p>
-          <span class="material-icons" style={{ color: "#484848" }}>
-            &#xE8B8;
+          <span class="material-icons" style={{ color: "#484848",display:"inline" }}>
+            &nbsp;&nbsp;&nbsp;&nbsp;&#xE8B8;
           </span>
           <LongLink to="/admin" label="Admin Page" />
+          <p>&nbsp;</p>
           </>
           )}
           </>
