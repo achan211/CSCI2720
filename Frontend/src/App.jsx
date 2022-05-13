@@ -374,7 +374,6 @@ function Admin_page() {
   );
 }
 
-// TO DO: Change username from Alvin to user based on cookie / session!
 function Location_details() {
   const [c, setC] = useState([]);
   const[nc, setNC] = useState("");
@@ -518,7 +517,7 @@ function Location_details() {
       </div>
       <div class="container mt-3 mb-4">
         <div class="row">
-        <div class="col-auto p-0">{/*wanna have weather icon here but need work (if have time sin do la)*/}</div>
+        <div class="col-auto p-0"></div>
           <div class="col-auto me-auto">
             <h2>Current Temperature: {details.Temperature}°C</h2>
             <p class="m-0">
@@ -655,7 +654,6 @@ function Logout () {
     );
 }
 
-// TO DO: Map icon to each location view!
 function Home() {
   const [data, setData] = useState([]);
   const [q, setQ] = useState("");
@@ -779,7 +777,6 @@ function Datatable({ fData }) {
   );
 }
 
-// TO DO: Change from Alvin to user (by cookie / session)!
 function FavTable() {
   const navigate = useNavigate();
   const handleRowClick = (link) => {
@@ -930,8 +927,6 @@ function Login() {
     );
   }
 
-
-// Check Check if any error
 function CreateAccount() {
   const [username, setU] = useState("")
   const [pwd, setP] = useState("")

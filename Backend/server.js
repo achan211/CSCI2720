@@ -55,18 +55,6 @@ db.once("open", function () {
       .then((text) => res.send(text));
   });
 
-  // TO DO - Urgent:
-  // Map icons for each location (Frontend)
-  // Admin CRUD Page for Users and Locations (Frontend)
-  // Show username and Login/Logout (Jimmy - Session / Backend?)
-  // Admin have button at seperate Location views to refresh Location temperature data (Frontend for button, Backend for update data)
-  // function Login (Frontend + Jimmy)
-
-  // TO DO - Not very urgent but Urgent:
-  // Think think how VM works (ALL)
-  // Project Documentations (ALL)
-  // Include full names and student IDs of all members in all code files using comments. (ALL)
-
   // Search for Location - DONE!
   app.get("/loc", (req, res) => {
     // query in the form /loc?keyword=Hong-Kong
@@ -86,7 +74,6 @@ db.once("open", function () {
 
   app.post("/login", (req, res) => {
     // Form validation
-
     if (req.body["username"].length < 4 || req.body["username"].length > 20) {
       return res.status(400).json("wrong name length");
     }
@@ -94,9 +81,6 @@ db.once("open", function () {
     if (req.body["pwd"].length < 4 || req.body["pwd"].length > 20) {
       return res.status(400).json("wrong password length");
     }
-    //  username: req.body["username"],
-    // pwd: req.body["pwd"],
-    // admin: Ad,
     const password = req.body.pwd;
     // Find user by email
     User.findOne({ username: req.body["username"] }).then((user) => {
@@ -121,13 +105,6 @@ db.once("open", function () {
       });
     });
   });
-
-  // Location: Hong-Kong, London, New-York, Tokyo, Osaka, Singapore, Taipei, Paris, Rome, Berlin, Asterdam, Seoul, Bangkok, Shanghai, Dubai
-
-  // Retrieve temp_c, wind_kph, wind_dir, humidity, precip_mm, vis_km
-
-  //Example of getting JSON file from Weatherapi.com
-  //So to get current weather for London: JSON: http://api.weatherapi.com/v1/current.json?key=d73c8d825739428089d134440222304&q=London
 
   // Add User Comment - DONE!
   app.post("/newComment", (req, res) => {
@@ -198,8 +175,6 @@ db.once("open", function () {
           });
       });
   });
-
-  // Logout
 
   // View User Favourite Array - DONE!
   app.get("/favourite/:username", (req, res) => {
@@ -560,13 +535,7 @@ db.once("open", function () {
   });
 });
 
-// listen to port 5000
 const PORT = 4000;
 const server = app.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);
 });
-
-// Step 1 create folder
-// npm init
-// install all packages you need
-// npm start
