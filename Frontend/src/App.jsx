@@ -928,7 +928,7 @@ function Login() {
   }
 
 function CreateAccount() {
-  const [username, setU] = useState("")
+  const [userName, setU] = useState("")
   const [pwd, setP] = useState("")
 
   function handlePasswordCheck() {
@@ -940,7 +940,7 @@ function CreateAccount() {
       ) {
         msg.style.color = "red";
         msg.innerHTML = " * Password must Match the previous entry.";
-        document.getElementById("btn").disabled = true;
+        document.getElementById("submit").disabled = true;
       } else {
         msg.style.color = "green";
         msg.innerHTML = " Password match";
@@ -951,17 +951,32 @@ function CreateAccount() {
 
   const handleReg = (e) => {
     e.preventDefault()
-    let bodytext = "username=" + username + "&pwd=" + pwd;
-    console.log(bodytext)
-    fetch("/user", {
-      method: "POST", 
-      headers: {"Content-Type": "application/x-www-form-urlencoded"},
-      body: bodytext})
-    .then(data => {
-      console.log(data);
-      alert(data);
-    })
+    if (userName === "" || pwd === "") {
+      alert("Missing information.")
+    } else {
+      if (userName.length < 4 || userName.length > 20) {
+        alert("Username should be 4 to 20 characters.")
+      } else {
+        if (pwd.length < 4 || pwd.length > 20) {
+          alert("Password should be 4 to 20 characters.")
+        } else {
+          let bodytext = "username=" + userName + "&pwd=" + pwd
+
+          fetch("/user", {
+              method: "POST", 
+              headers: {"Content-Type": "application/x-www-form-urlencoded"},
+              body: bodytext})
+          .then(res => res.text())
+          .then(data => console.log(data))
+          alert("User is created! Please check!")
+        }
+      }
+    }
   }
+  
+  if (cookies.get('loggined')== "true")
+    return <Home/>;
+  else
   return (
     <>
       <br />
