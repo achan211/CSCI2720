@@ -603,7 +603,7 @@ function NavList (){
       return (
           <>
           <p>&nbsp;</p>
-          <span class="material-icons" styley={{ color: "#484848",display:"inline" }}>
+          <span class="material-icons" style={{ color: "#484848",display:"inline" }}>
             &nbsp;&nbsp;&nbsp;&nbsp;&#xE88A;
           </span>
           <LongLink to="/home" label="Home" />
@@ -652,6 +652,7 @@ function Logout () {
               role="button"
               data-bs-toggle="dropdown"
               aria-expanded="false"
+              style={{color: "#484848" }}
             >
               <span style={{ float: "right", color: "#484848" }}>
                 <i style={{ color: "#484848" }} class="material-icons">
