@@ -35,7 +35,7 @@ function App() {
             class="navbar navbar-expand-lg navbar-light"
             style={{ backgroundColor: "silver" }}
           >
-            <div class="collapse navbar-collapse" id="navbarNav">
+            <div class="navbar-collapse" id="navbarNav">
               <img class="ms-4" src="\images\favicon.png"></img>
               <span
                 style={{
