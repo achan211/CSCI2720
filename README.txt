@@ -17,7 +17,7 @@ Step 2: ssh to the server
         (user)@(IP Address o the instance)
         
         For TA grading:
-        The public is changed everytime when the lab session end. If you access our webiste later like after 14/5/2022 5 p.m, the IP address is not 34.234.73.30 anymore.
+        The public is changed everytime when the lab session end. If you access our webiste later like after 14/5/2022 5 p.m, the IP address is not 34.234.73.30 anymore. Please generate a new one.
 
 Step 3: Git clone the project Or Download it from the blackboard submission if you are TA
 
