@@ -1,6 +1,12 @@
-import React from 'react';
+// Name and SID (alphabetically):
+// Alvin CHAN 1155108897
+// Chun Yeung CHOW 1155131406
+// Ngou Shan WONG 1155141835
+// Siu Fung CHEUNG 1155110966
+// Wing Lam CHENG 1155125313
+// Yee Han CHENG 1155143426
 
-import {Link} from 'react-router-dom';
+import React from 'react';
 
 import { 
 Map, 

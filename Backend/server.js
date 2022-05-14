@@ -1,4 +1,10 @@
-// Use Port 4000!
+// Name and SID (alphabetically):
+// Alvin CHAN 1155108897
+// Chun Yeung CHOW 1155131406
+// Ngou Shan WONG 1155141835
+// Siu Fung CHEUNG 1155110966
+// Wing Lam CHENG 1155125313
+// Yee Han CHENG 1155143426
 
 const express = require("express");
 const app = express();
@@ -373,7 +379,7 @@ db.once("open", function () {
   // Admin delete Location (search by locat name)-->DONE
 
   app.delete("/location/:locat", (req, res) => {
-    var query = Location.findOne({ locName: req.params["locat"] });
+    var query = Loc.findOne({ locName: req.params["locat"] });
     query.exec().then(
       (results) => {
         if (results == null) {

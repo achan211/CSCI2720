@@ -1,3 +1,11 @@
+// Name and SID (alphabetically):
+// Alvin CHAN 1155108897
+// Chun Yeung CHOW 1155131406
+// Ngou Shan WONG 1155141835
+// Siu Fung CHEUNG 1155110966
+// Wing Lam CHENG 1155125313
+// Yee Han CHENG 1155143426
+
 import ReactDOM from "react-dom";
 import "./App.css";
 import MapContainer from"./Map.jsx";
